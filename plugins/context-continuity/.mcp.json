@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "context_continuity": {
+      "command": "node",
+      "args": [
+        "src/mcp-server.mjs"
+      ],
+      "cwd": ".",
+      "startup_timeout_sec": 10,
+      "tool_timeout_sec": 30
+    }
+  }
+}

@@ -1,0 +1,442 @@
+{
+  "schema_version": "1.0",
+  "frozen_at": "2026-08-28",
+  "claim_limit": "Synthetic native-loss fixtures validate the protocol and plugin state core only; they are not measurements of Codex native compaction.",
+  "cases": [
+    {
+      "id": "auto-01",
+      "category": "automatic_compaction",
+      "title": "Local plugin build must not become an install",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "goal": "Build a locally verifiable Codex continuity plugin.",
+      "constraints": ["Do not install or publish the plugin."],
+      "authorization": "Local source edits and tests only.",
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Run the repository validation.",
+      "native_loss_kinds": ["hard_constraint", "authorization"],
+      "native_invented": []
+    },
+    {
+      "id": "auto-02",
+      "category": "automatic_compaction",
+      "title": "Keep the selected file and verification command",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "goal": "Fix the parser regression.",
+      "constraints": ["Do not modify generated fixtures."],
+      "work_object": "src/parser.mjs at git head a11ce",
+      "completion": "The reproduction test exists but the fix is not verified.",
+      "next_action": "Patch the parser and rerun parser.test.mjs.",
+      "native_loss_kinds": ["work_object", "completion"],
+      "native_invented": []
+    },
+    {
+      "id": "repeat-01",
+      "category": "repeated_compaction",
+      "title": "Two compactions retain the no-delete boundary",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 2 },
+      "goal": "Reduce flaky cleanup failures.",
+      "constraints": ["Do not delete user workspaces."],
+      "authorization": "Temporary test directories may be removed.",
+      "work_object": "test/helpers.mjs",
+      "next_action": "Add bounded retry to temporary cleanup.",
+      "native_loss_kinds": ["hard_constraint"],
+      "native_invented": []
+    },
+    {
+      "id": "repeat-02",
+      "category": "repeated_compaction",
+      "title": "Three compactions retain decision rationale",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 3 },
+      "goal": "Keep recovery context below its token budget.",
+      "constraints": ["Critical goal and authorization lines may not be omitted."],
+      "decision": "Reserve footer tokens before adding optional state because post-hoc truncation can drop risk instructions.",
+      "work_object": "src/recovery.mjs",
+      "next_action": "Verify the 300-token regression case.",
+      "native_loss_kinds": ["decision"],
+      "native_invented": []
+    },
+    {
+      "id": "goal-change-01",
+      "category": "user_goal_change",
+      "title": "User changes from implementation to diagnosis",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 1 },
+      "initial_goal": "Implement the failing feature.",
+      "goal": "Diagnose the failure and report the cause without changing code.",
+      "constraints": ["Do not implement a fix."],
+      "work_object": "src/worker.ts",
+      "next_action": "Inspect logs and explain the cause.",
+      "native_loss_kinds": ["hard_constraint"],
+      "native_invented": [
+        { "kind": "objective", "statement": "Implement the failing feature." }
+      ]
+    },
+    {
+      "id": "goal-change-02",
+      "category": "user_goal_change",
+      "title": "User narrows a full platform to a prototype",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "initial_goal": "Build a complete memory platform.",
+      "goal": "Build only the minimum compaction recovery loop.",
+      "constraints": ["No vector database, dashboard, or cloud sync."],
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Validate PreCompact to SessionStart recovery.",
+      "native_loss_kinds": ["hard_constraint"],
+      "native_invented": [
+        { "kind": "next_action", "statement": "Design the cloud memory dashboard." }
+      ]
+    },
+    {
+      "id": "correction-01",
+      "category": "user_correction",
+      "title": "Explicit correction replaces the wrong repository",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 1 },
+      "initial_goal": "Edit D:/Codex/intent-loop.",
+      "goal": "Edit D:/Codex/context-continuity.",
+      "correction": "The prior repository was wrong; use the continuity repository.",
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Inspect the continuity repository status.",
+      "native_loss_kinds": ["correction", "work_object"],
+      "native_invented": []
+    },
+    {
+      "id": "correction-02",
+      "category": "user_correction",
+      "title": "Correction removes an invented publish authorization",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "initial_goal": "Implement and publish the plugin.",
+      "goal": "Implement the plugin locally.",
+      "correction": "Publishing was never authorized; do not install or publish.",
+      "constraints": ["Do not install, enable, or publish."],
+      "authorization": "Local implementation and tests only.",
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Run local tests.",
+      "native_loss_kinds": ["correction", "authorization"],
+      "native_invented": [
+        { "kind": "authorization", "statement": "Publishing is authorized." }
+      ]
+    },
+    {
+      "id": "dispute-01",
+      "category": "unresolved_disagreement",
+      "title": "Do not merge a disputed schema choice",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 1 },
+      "goal": "Choose the minimum task state schema.",
+      "dispute": "User prefers event provenance; Agent still suspects a single summary file is simpler. No agreement yet.",
+      "open_question": "Whether a projection file should be persisted or always rebuilt remains unresolved.",
+      "work_object": "spec/task-state-item.schema.json",
+      "next_action": "Compare failure behavior before choosing.",
+      "native_loss_kinds": ["dispute", "open_question"],
+      "native_invented": []
+    },
+    {
+      "id": "dispute-02",
+      "category": "unresolved_disagreement",
+      "title": "Preserve uncertainty about completion evidence",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "goal": "Decide whether the release is complete.",
+      "dispute": "The build is green, but the user requires a live URL check before calling the release complete.",
+      "constraints": ["Do not equate a green build with publication."],
+      "work_object": "release candidate 0.1.0",
+      "next_action": "Verify the live release surface.",
+      "native_loss_kinds": ["dispute", "hard_constraint"],
+      "native_invented": [
+        { "kind": "completion", "statement": "The release is complete." }
+      ]
+    },
+    {
+      "id": "pause-01",
+      "category": "long_pause_resume",
+      "title": "Resume after a week at the pending validation",
+      "transition": { "kind": "resume", "trigger": "manual", "repeats": 1 },
+      "goal": "Finish the plugin validation evidence.",
+      "constraints": ["Recheck version-sensitive platform claims."],
+      "completion": "Unit tests passed; official plugin validation has not run.",
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Run the official plugin validator.",
+      "native_loss_kinds": ["completion", "next_action"],
+      "native_invented": []
+    },
+    {
+      "id": "pause-02",
+      "category": "long_pause_resume",
+      "title": "Resume with a version-pinned work object",
+      "transition": { "kind": "resume", "trigger": "manual", "repeats": 1 },
+      "goal": "Continue a migration without repeating completed steps.",
+      "constraints": ["Do not delete the source until the D-drive copy is verified."],
+      "completion": "Files copied; checksums are not yet compared.",
+      "work_object": "D:/Codex/migrated-project at commit 4cafe",
+      "next_action": "Compare source and destination hashes.",
+      "native_loss_kinds": ["completion", "work_object"],
+      "native_invented": []
+    },
+    {
+      "id": "handoff-01",
+      "category": "cross_agent_handoff",
+      "title": "Subagent receives scope without new authority",
+      "transition": { "kind": "handoff", "trigger": "manual", "repeats": 1 },
+      "goal": "Research Codex compact lifecycle events.",
+      "constraints": ["Use official sources only."],
+      "authorization": "Read-only research; no configuration changes.",
+      "work_object": "Codex official documentation dated 2026-08-28",
+      "next_action": "Verify PreCompact and PostCompact payload fields.",
+      "native_loss_kinds": ["authorization"],
+      "native_invented": []
+    },
+    {
+      "id": "handoff-02",
+      "category": "cross_agent_handoff",
+      "title": "Imported result remains a candidate",
+      "transition": { "kind": "handoff", "trigger": "manual", "repeats": 1 },
+      "goal": "Review the privacy design.",
+      "constraints": ["A subagent conclusion cannot overwrite user intent."],
+      "dispute": "Whether 30-day retention is safe remains unverified.",
+      "work_object": "docs/privacy.md",
+      "next_action": "Return evidence and uncertainty to the parent.",
+      "native_loss_kinds": ["hard_constraint", "dispute"],
+      "native_invented": [
+        { "kind": "decision", "statement": "Thirty-day deletion is approved." }
+      ]
+    },
+    {
+      "id": "summary-error-01",
+      "category": "erroneous_summary",
+      "title": "Host summary invents test completion",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "goal": "Make all deterministic tests pass.",
+      "completion": "Twenty-six of twenty-seven tests pass.",
+      "work_object": "test/recovery.test.mjs",
+      "next_action": "Fix the remaining recovery wording assertion.",
+      "native_loss_kinds": ["completion", "next_action"],
+      "native_invented": [
+        { "kind": "completion", "statement": "All tests pass." }
+      ]
+    },
+    {
+      "id": "summary-error-02",
+      "category": "erroneous_summary",
+      "title": "Host summary drops an unresolved source gap",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 1 },
+      "goal": "Document current WorkBuddy Hook support.",
+      "constraints": ["Do not present Beta SDK behavior as desktop product support."],
+      "open_question": "The desktop product PostCompact event is not yet independently verified.",
+      "work_object": "platform capability matrix",
+      "next_action": "Locate the product-specific official reference.",
+      "native_loss_kinds": ["open_question", "hard_constraint"],
+      "native_invented": [
+        { "kind": "completion", "statement": "WorkBuddy desktop support is confirmed." }
+      ]
+    },
+    {
+      "id": "superseded-01",
+      "category": "superseded_information",
+      "title": "New branch replaces the old work object",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "goal": "Validate the parser fix.",
+      "prior_work_object": "branch old-parser at commit 1111111",
+      "work_object": "branch parser-fix at commit 2222222",
+      "next_action": "Run tests on parser-fix.",
+      "native_loss_kinds": ["work_object"],
+      "native_invented": [
+        { "kind": "work_object", "statement": "branch old-parser at commit 1111111" }
+      ]
+    },
+    {
+      "id": "superseded-02",
+      "category": "superseded_information",
+      "title": "New constraint replaces an expired format rule",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 1 },
+      "goal": "Deliver the report in Markdown.",
+      "prior_constraints": ["Include inline citations in the body."],
+      "constraints": ["Do not include citations in the publishable body."],
+      "work_object": "final-report.md",
+      "next_action": "Run the publication-cleanliness check.",
+      "native_loss_kinds": ["hard_constraint"],
+      "native_invented": [
+        { "kind": "hard_constraint", "statement": "Include inline citations in the body." }
+      ]
+    },
+    {
+      "id": "raw-missing-01",
+      "category": "raw_conversation_unavailable",
+      "title": "Resume when only minimum state remains",
+      "transition": { "kind": "raw_unavailable", "trigger": "manual", "repeats": 1 },
+      "goal": "Complete local validation.",
+      "constraints": ["Do not infer success from prior prose."],
+      "completion": "The repository validator passed; real compaction is pending.",
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Run a real manual compaction.",
+      "native_loss_kinds": ["completion", "next_action"],
+      "native_invented": []
+    },
+    {
+      "id": "raw-missing-02",
+      "category": "raw_conversation_unavailable",
+      "title": "Recover a correction without the original transcript",
+      "transition": { "kind": "raw_unavailable", "trigger": "manual", "repeats": 1 },
+      "initial_goal": "Save every chat message.",
+      "goal": "Preserve only task invariants.",
+      "correction": "This is not a chat backup tool.",
+      "constraints": ["Do not persist complete transcripts."],
+      "work_object": "state retention policy",
+      "next_action": "Verify bounded prompt storage.",
+      "native_loss_kinds": ["correction", "hard_constraint"],
+      "native_invented": []
+    },
+    {
+      "id": "compound-01",
+      "category": "compound",
+      "title": "Repeated compaction after a corrected goal",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 3 },
+      "initial_goal": "Build a memory platform.",
+      "goal": "Build a minimum continuity plugin.",
+      "correction": "Remove the memory-platform scope.",
+      "constraints": ["No retrieval index or dashboard."],
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Validate the minimum Hook loop.",
+      "native_loss_kinds": ["correction", "hard_constraint"],
+      "native_invented": [
+        { "kind": "next_action", "statement": "Implement semantic memory retrieval." }
+      ]
+    },
+    {
+      "id": "compound-02",
+      "category": "compound",
+      "title": "Resume with dispute and stale completion",
+      "transition": { "kind": "resume", "trigger": "manual", "repeats": 1 },
+      "goal": "Decide whether the prototype exit gate is met.",
+      "dispute": "Manual compaction passed but automatic compaction is still unverified.",
+      "constraints": ["Do not call the prototype verified without automatic-compaction evidence."],
+      "completion": "Manual lifecycle evidence captured.",
+      "work_object": "validation/manual-compaction.json",
+      "next_action": "Attempt a bounded automatic compaction run.",
+      "native_loss_kinds": ["dispute", "hard_constraint"],
+      "native_invented": [
+        { "kind": "completion", "statement": "All lifecycle validation is complete." }
+      ]
+    },
+    {
+      "id": "compound-03",
+      "category": "compound",
+      "title": "Handoff after work object changed",
+      "transition": { "kind": "handoff", "trigger": "manual", "repeats": 1 },
+      "goal": "Review the active plugin schema.",
+      "prior_work_object": "schema draft v0",
+      "work_object": "spec/task-state-item.schema.json v1.0",
+      "constraints": ["Review only; do not edit."],
+      "authorization": "Read-only handoff.",
+      "next_action": "Report schema mismatches to the parent.",
+      "native_loss_kinds": ["work_object", "authorization"],
+      "native_invented": [
+        { "kind": "work_object", "statement": "schema draft v0" }
+      ]
+    },
+    {
+      "id": "compound-04",
+      "category": "compound",
+      "title": "Erroneous summary after two compactions",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 2 },
+      "goal": "Pass official plugin validation.",
+      "constraints": ["Do not treat unit tests as manifest validation."],
+      "completion": "Unit tests pass; manifest validation has not run.",
+      "work_object": ".codex-plugin/plugin.json and .mcp.json",
+      "next_action": "Run validate_plugin.py.",
+      "native_loss_kinds": ["hard_constraint", "completion"],
+      "native_invented": [
+        { "kind": "completion", "statement": "Official plugin validation passed." }
+      ]
+    },
+    {
+      "id": "compound-05",
+      "category": "compound",
+      "title": "Goal correction plus unresolved platform claim",
+      "transition": { "kind": "compaction", "trigger": "manual", "repeats": 1 },
+      "initial_goal": "Implement adapters for every Agent.",
+      "goal": "Implement Codex first and document adapter boundaries.",
+      "correction": "Other Agent adapters are out of MVP implementation scope.",
+      "open_question": "Cursor lacks a confirmed post-compaction event in the frozen evidence.",
+      "constraints": ["Do not implement unverified adapter behavior."],
+      "work_object": "Codex adapter",
+      "next_action": "Finish Codex validation.",
+      "native_loss_kinds": ["correction", "open_question"],
+      "native_invented": []
+    },
+    {
+      "id": "compound-06",
+      "category": "compound",
+      "title": "Raw transcript missing after authorization correction",
+      "transition": { "kind": "raw_unavailable", "trigger": "manual", "repeats": 1 },
+      "initial_goal": "Install and test globally.",
+      "goal": "Test from source without installation.",
+      "correction": "Global installation was not authorized.",
+      "authorization": "One-off source execution in a scratch directory only.",
+      "constraints": ["Do not change global Codex configuration."],
+      "work_object": "D:/Codex/context-continuity",
+      "next_action": "Use project-local Hook wiring for lifecycle verification.",
+      "native_loss_kinds": ["authorization", "correction"],
+      "native_invented": [
+        { "kind": "authorization", "statement": "Global installation is authorized." }
+      ]
+    },
+    {
+      "id": "compound-07",
+      "category": "compound",
+      "title": "Resume after a constraint was replaced",
+      "transition": { "kind": "resume", "trigger": "manual", "repeats": 1 },
+      "goal": "Generate the final implementation report.",
+      "prior_constraints": ["Claim success when protocol replay passes."],
+      "constraints": ["Separate protocol replay from real product efficacy."],
+      "completion": "Protocol fixtures passed.",
+      "work_object": "docs/implementation-status.md",
+      "next_action": "Record real lifecycle status without overstating it.",
+      "native_loss_kinds": ["hard_constraint"],
+      "native_invented": [
+        { "kind": "hard_constraint", "statement": "Claim success when protocol replay passes." }
+      ]
+    },
+    {
+      "id": "compound-08",
+      "category": "compound",
+      "title": "Subagent dispute survives repeated parent compaction",
+      "transition": { "kind": "handoff", "trigger": "manual", "repeats": 2 },
+      "goal": "Review whether automatic cleanup belongs in MVP.",
+      "dispute": "Automatic 30-day deletion may remove a paused task; no reliable host task-close signal is proven.",
+      "constraints": ["Do not add background deletion without lifecycle evidence."],
+      "work_object": "retention policy",
+      "next_action": "Keep manual deletion and document the limitation.",
+      "native_loss_kinds": ["dispute", "hard_constraint"],
+      "native_invented": []
+    },
+    {
+      "id": "compound-09",
+      "category": "compound",
+      "title": "Summary invents scope after user narrows it",
+      "transition": { "kind": "compaction", "trigger": "auto", "repeats": 1 },
+      "initial_goal": "Build a full task manager.",
+      "goal": "Protect only continuity invariants.",
+      "correction": "Planning and scheduling are outside this product.",
+      "constraints": ["Do not create task queues, deadlines, or project dashboards."],
+      "work_object": "Context Continuity MVP",
+      "next_action": "Verify lifecycle and state ownership.",
+      "native_loss_kinds": ["correction", "hard_constraint"],
+      "native_invented": [
+        { "kind": "next_action", "statement": "Implement project scheduling." }
+      ]
+    },
+    {
+      "id": "compound-10",
+      "category": "compound",
+      "title": "Pause, version drift, and unverified completion",
+      "transition": { "kind": "resume", "trigger": "manual", "repeats": 1 },
+      "goal": "Revalidate the plugin against the current Codex build.",
+      "constraints": ["Recheck version-sensitive Hooks before relying on old evidence."],
+      "open_question": "The current CLI may differ from the frozen 0.150.0-alpha.8 baseline.",
+      "completion": "The prior run passed against the frozen baseline only.",
+      "work_object": "current Codex installation",
+      "next_action": "Read the current version and rerun official validation.",
+      "native_loss_kinds": ["open_question", "completion"],
+      "native_invented": [
+        { "kind": "completion", "statement": "Current-version compatibility is verified." }
+      ]
+    }
+  ]
+}

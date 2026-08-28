@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://context-continuity.local/spec/ledger.schema.json",
+  "title": "Context Continuity append-only task ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_ref",
+    "created_at",
+    "updated_at",
+    "events"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "task_ref": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{1,31}:\\S{1,223}$"
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "events": {
+      "type": "array",
+      "maxItems": 2000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema_version",
+          "event_id",
+          "sequence",
+          "event_type",
+          "recorded_at",
+          "source_ref",
+          "previous_hash",
+          "payload",
+          "event_hash"
+        ],
+        "properties": {
+          "schema_version": { "const": "1.0" },
+          "event_id": { "type": "string", "minLength": 1 },
+          "sequence": { "type": "integer", "minimum": 1 },
+          "event_type": {
+            "enum": [
+              "workspace_observed",
+              "prompt_signal_observed",
+              "state_recorded",
+              "external_contract_bound",
+              "task_cleared",
+              "task_reset",
+              "enabled_changed",
+              "management_challenge_issued",
+              "next_actions_revalidation_required",
+              "snapshot_created",
+              "compaction_completed",
+              "restore_checked",
+              "subagent_capsule_exported",
+              "subagent_result_observed",
+              "handoff_imported",
+              "session_ended"
+            ]
+          },
+          "recorded_at": { "type": "string", "format": "date-time" },
+          "source_ref": { "type": "string", "minLength": 1 },
+          "previous_hash": {
+            "type": ["string", "null"],
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "payload": { "type": "object" },
+          "event_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    }
+  }
+}

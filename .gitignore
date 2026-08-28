@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.tmp/
+plugin-data/
+context-continuity-unconfigured/

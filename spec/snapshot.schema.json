@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://context-continuity.local/spec/snapshot.schema.json",
+  "title": "Context Continuity pre-transition snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "task_ref",
+    "generation",
+    "event_sequence",
+    "transition_epoch",
+    "trigger",
+    "turn_id",
+    "created_at",
+    "workspace",
+    "data_root_durable",
+    "projection_digest",
+    "coverage_gaps",
+    "effective_state",
+    "snapshot_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "snapshot_id": { "type": "string", "minLength": 1 },
+    "task_ref": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{1,31}:\\S{1,223}$"
+    },
+    "generation": { "type": "integer", "minimum": 0 },
+    "event_sequence": { "type": "integer", "minimum": 0 },
+    "transition_epoch": { "type": "string", "minLength": 1 },
+    "trigger": { "enum": ["manual", "auto"] },
+    "turn_id": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "workspace": {
+      "type": ["object", "null"],
+      "properties": {
+        "canonical_cwd": { "type": "string" },
+        "cwd_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "git_root_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "git_head": { "type": ["string", "null"] },
+        "dirty_sha256": { "type": ["string", "null"] },
+        "content_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "content_verification": { "enum": ["verified", "unavailable"] },
+        "captured_at": { "type": "string", "format": "date-time" },
+        "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "data_root_durable": { "type": "boolean" },
+    "projection_digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "coverage_gaps": { "type": "array", "items": { "type": "object" } },
+    "effective_state": {
+      "type": "object",
+      "required": [
+        "contract",
+        "items",
+        "pending_prompt_signals",
+        "lifecycle_status"
+      ],
+      "properties": {
+        "contract": { "type": "object" },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "task-state-item.schema.json" }
+        },
+        "pending_prompt_signals": { "type": "array" },
+        "lifecycle_status": { "type": "string" }
+      }
+    },
+    "snapshot_digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

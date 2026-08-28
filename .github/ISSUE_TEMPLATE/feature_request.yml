@@ -1,0 +1,37 @@
+name: Bounded feature request
+description: Propose a mechanism tied to a concrete continuity failure.
+title: "[Request] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: failure
+    attributes:
+      label: Continuity failure
+      description: What is lost, when does it surface, and what is the observable cost?
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Why current behavior is insufficient
+    validations:
+      required: true
+  - type: textarea
+    id: mechanism
+    attributes:
+      label: Smallest proposed mechanism
+    validations:
+      required: true
+  - type: textarea
+    id: costs
+    attributes:
+      label: Token, latency, storage, privacy, and conflict costs
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Product boundary
+      options:
+        - label: This does not require transcript backup, general memory, task management, permission control, or a second Agent harness.
+          required: true

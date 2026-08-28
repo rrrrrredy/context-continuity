@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://context-continuity.local/spec/handoff-capsule.schema.json",
+  "title": "Context Continuity handoff capsule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "capsule_id",
+    "source_task_ref",
+    "source_generation",
+    "source_projection_digest",
+    "scope",
+    "created_at",
+    "contract_ref",
+    "contract_version",
+    "items",
+    "omitted_item_count",
+    "import_policy",
+    "capsule_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "capsule_id": { "type": "string", "minLength": 1 },
+    "source_task_ref": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{1,31}:\\S{1,223}$"
+    },
+    "source_generation": { "type": "integer", "minimum": 0 },
+    "source_projection_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "scope": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "contract_ref": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "contract_version": { "type": "integer", "minimum": 1 },
+    "items": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "statement",
+          "source_ref",
+          "recorded_at",
+          "scope",
+          "status",
+          "authority",
+          "verification",
+          "supersedes",
+          "evidence_digest"
+        ],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "kind": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "source_ref": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "recorded_at": { "type": "string", "format": "date-time" },
+          "scope": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "status": { "type": "string" },
+          "authority": { "type": "string" },
+          "verification": { "type": "string" },
+          "supersedes": {
+            "type": "array",
+            "maxItems": 32,
+            "items": { "type": "string", "maxLength": 256 }
+          },
+          "evidence_digest": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "omitted_item_count": { "type": "integer", "minimum": 0, "maximum": 128 },
+    "import_policy": { "const": "candidate_only" },
+    "capsule_digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

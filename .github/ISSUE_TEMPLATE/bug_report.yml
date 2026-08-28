@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible continuity, privacy, or host-integration defect.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not attach raw transcripts, task ledgers, credentials, or private project data.
+  - type: input
+    id: version
+    attributes:
+      label: Versions
+      description: Context Continuity, Codex, Node.js, and operating system.
+    validations:
+      required: true
+  - type: dropdown
+    id: transition
+    attributes:
+      label: Transition
+      options:
+        - Manual compaction
+        - Automatic compaction
+        - Session resume
+        - Clear
+        - Subagent handoff
+        - MCP state operation
+        - Installation or uninstall
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Use the smallest redacted reproduction.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation output
+      description: Redacted output from npm run validate or the relevant receipt.

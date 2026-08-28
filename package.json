@@ -1,0 +1,33 @@
+{
+  "name": "context-continuity",
+  "version": "0.1.0+codex.20260829002925",
+  "private": true,
+  "description": "Local-first Codex plugin that preserves source-aware task invariants across lossy context transitions.",
+  "license": "Apache-2.0",
+  "author": "Song Luo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rrrrrredy/context-continuity.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rrrrrredy/context-continuity/issues"
+  },
+  "homepage": "https://github.com/rrrrrredy/context-continuity#readme",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1",
+    "validate": "node scripts/validate-repo.mjs",
+    "smoke:hooks": "node scripts/smoke-hooks.mjs",
+    "smoke:mcp": "node scripts/smoke-mcp.mjs",
+    "benchmark:hook": "node scripts/benchmark-hook.mjs",
+    "eval:protocol": "node evals/run-protocol-evals.mjs",
+    "verify:digests": "node scripts/artifact-digests.mjs",
+    "verify:lifecycle:manual": "node scripts/verify-real-lifecycle.mjs --mode manual --output validation/real-manual.json",
+    "verify:lifecycle:auto": "node scripts/verify-real-lifecycle.mjs --mode auto --output validation/real-auto.json",
+    "verify:installed": "node scripts/verify-installed-package.mjs --output validation/installed-package.json",
+    "verify:installed-host": "node scripts/verify-installed-host-read.mjs --output validation/installed-host-read.json"
+  }
+}

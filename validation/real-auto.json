@@ -1,0 +1,336 @@
+{
+  "schema_version": "1.0",
+  "run_kind": "real_codex_lifecycle",
+  "mode": "auto",
+  "verified": true,
+  "started_at": "2026-08-28T16:41:01.245Z",
+  "completed_at": "2026-08-28T16:42:28.191Z",
+  "codex_version": "codex-cli 0.150.0-alpha.8",
+  "plugin_runtime": "source_checkout",
+  "app_server_method": "model_auto_compact_token_limit",
+  "model": "gpt-5.4-mini",
+  "source_tree_sha256": "890a15c89dac89e4e4b7958fd8a6dea643d25f58f0551cb6cbf936f3a2816325",
+  "source_plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
+  "plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
+  "source_tree_file_count": 80,
+  "plugin_package_file_count": 18,
+  "scratch_hook_config_sha256": "546aaec1e08b1e35ddc0e6fc6fd88891b0eae61b66fad2c06a4a2e16442e90d3",
+  "input_sha256": "8280e8b07fd948cb347a9b178a269bdb0a6a71272b9ed2acbca9f332ec4241f7",
+  "confirmation_prompt_sha256": "98fb3647ef3d6c665243b14942c6b73b44bf29849c594348bfcb453a76c83456",
+  "readable_state_confirmation_used": true,
+  "preexisting_hook_listing": [
+    {
+      "event_name": "preCompact",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "postCompact",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "sessionStart",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "sessionEnd",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "subagentStart",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "subagentStop",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "postCompact",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "sessionStart",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "sessionEnd",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    },
+    {
+      "event_name": "stop",
+      "source": "plugin",
+      "is_managed": false,
+      "trust_status": "untrusted",
+      "enabled": true
+    }
+  ],
+  "session_hook_events_injected": [
+    "SessionStart",
+    "UserPromptSubmit",
+    "PreCompact",
+    "PostCompact",
+    "SubagentStart",
+    "SubagentStop",
+    "SessionEnd"
+  ],
+  "hook_runs": [
+    {
+      "event_name": "sessionStart",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "thread",
+      "duration_ms": 729
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 819
+    },
+    {
+      "event_name": "preCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 847
+    },
+    {
+      "event_name": "postCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 624
+    },
+    {
+      "event_name": "sessionStart",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "thread",
+      "duration_ms": 739
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 667
+    },
+    {
+      "event_name": "preCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 937
+    },
+    {
+      "event_name": "postCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 1018
+    },
+    {
+      "event_name": "sessionStart",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "thread",
+      "duration_ms": 835
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 730
+    },
+    {
+      "event_name": "preCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 725
+    },
+    {
+      "event_name": "postCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 653
+    },
+    {
+      "event_name": "sessionStart",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "thread",
+      "duration_ms": 711
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 649
+    }
+  ],
+  "unrelated_hook_ran": false,
+  "context_compaction_items": [
+    {
+      "notification": "item/started",
+      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
+      "turn_id_sha256": "15728d85a6afaebd54f9229f73f3dbcf821a2f49ff9d2e8f315a810d801732be",
+      "item_id_sha256": "8dbd28d3d6ee8fd5f2e2a69bbe3fbebc10fbdf24222db7e03887525d4c78883a",
+      "item_type": "contextCompaction"
+    },
+    {
+      "notification": "item/completed",
+      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
+      "turn_id_sha256": "15728d85a6afaebd54f9229f73f3dbcf821a2f49ff9d2e8f315a810d801732be",
+      "item_id_sha256": "8dbd28d3d6ee8fd5f2e2a69bbe3fbebc10fbdf24222db7e03887525d4c78883a",
+      "item_type": "contextCompaction"
+    },
+    {
+      "notification": "item/started",
+      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
+      "turn_id_sha256": "10146ca04c9f17685073a05b94ad899f2615c9216e363e000e1058de1b77749f",
+      "item_id_sha256": "993fdfb9caace0159152b7a8a0a4989592872c92cd52a4ce8b2fcbe0eb666ec5",
+      "item_type": "contextCompaction"
+    },
+    {
+      "notification": "item/completed",
+      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
+      "turn_id_sha256": "10146ca04c9f17685073a05b94ad899f2615c9216e363e000e1058de1b77749f",
+      "item_id_sha256": "993fdfb9caace0159152b7a8a0a4989592872c92cd52a4ce8b2fcbe0eb666ec5",
+      "item_type": "contextCompaction"
+    },
+    {
+      "notification": "item/started",
+      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
+      "turn_id_sha256": "b91cef2a1328ec7f51c4e1e092698a5dee0ed18fb3a0e22c65a51445dfd8908a",
+      "item_id_sha256": "36ddbfc1dd8735bb90225f01da2d1228d1ace92943b0e6e8940f49523a50ea5b",
+      "item_type": "contextCompaction"
+    },
+    {
+      "notification": "item/completed",
+      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
+      "turn_id_sha256": "b91cef2a1328ec7f51c4e1e092698a5dee0ed18fb3a0e22c65a51445dfd8908a",
+      "item_id_sha256": "36ddbfc1dd8735bb90225f01da2d1228d1ace92943b0e6e8940f49523a50ea5b",
+      "item_type": "contextCompaction"
+    }
+  ],
+  "ledger_lifecycle_events": [
+    {
+      "sequence": 3,
+      "event_type": "snapshot_created",
+      "source_ref": "codex:PreCompact:auto",
+      "trigger": "auto",
+      "classification": null
+    },
+    {
+      "sequence": 4,
+      "event_type": "compaction_completed",
+      "source_ref": "codex:PostCompact:auto",
+      "trigger": "auto",
+      "classification": null
+    },
+    {
+      "sequence": 5,
+      "event_type": "restore_checked",
+      "source_ref": "codex:SessionStart:compact",
+      "trigger": null,
+      "classification": "ask_before_high_risk"
+    },
+    {
+      "sequence": 9,
+      "event_type": "snapshot_created",
+      "source_ref": "codex:PreCompact:auto",
+      "trigger": "auto",
+      "classification": null
+    },
+    {
+      "sequence": 10,
+      "event_type": "compaction_completed",
+      "source_ref": "codex:PostCompact:auto",
+      "trigger": "auto",
+      "classification": null
+    },
+    {
+      "sequence": 11,
+      "event_type": "restore_checked",
+      "source_ref": "codex:SessionStart:compact",
+      "trigger": null,
+      "classification": "continue_with_markers"
+    },
+    {
+      "sequence": 13,
+      "event_type": "snapshot_created",
+      "source_ref": "codex:PreCompact:auto",
+      "trigger": "auto",
+      "classification": null
+    },
+    {
+      "sequence": 14,
+      "event_type": "compaction_completed",
+      "source_ref": "codex:PostCompact:auto",
+      "trigger": "auto",
+      "classification": null
+    },
+    {
+      "sequence": 15,
+      "event_type": "restore_checked",
+      "source_ref": "codex:SessionStart:compact",
+      "trigger": null,
+      "classification": "continue_with_markers"
+    }
+  ],
+  "final_projection_digest": "d24ab808241261715586646c5540bbc5e271af0d81686fe6fc26dd2ec9920e52",
+  "final_generation": 1,
+  "final_restore_classification": "continue_with_markers",
+  "final_recovery_safe_to_continue": true,
+  "objective_preserved": true,
+  "next_action_preserved": true,
+  "next_action_requires_revalidation": true,
+  "prompt_or_assistant_content_in_receipt": false,
+  "persistent_install_or_trust_change": false,
+  "failure_reason": null
+}

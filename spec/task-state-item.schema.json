@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://context-continuity.local/spec/task-state-item.schema.json",
+  "title": "Context Continuity task state item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "namespace",
+    "kind",
+    "statement",
+    "source_ref",
+    "recorded_at",
+    "scope",
+    "status",
+    "authority",
+    "verification",
+    "supersedes",
+    "superseded_by",
+    "confidence",
+    "evidence_digest",
+    "provider",
+    "origin_authority",
+    "redacted",
+    "truncated"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "namespace": { "enum": ["intent", "operational"] },
+    "kind": {
+      "enum": [
+        "objective",
+        "hard_constraint",
+        "authorization",
+        "correction",
+        "decision",
+        "open_question",
+        "dispute",
+        "preference",
+        "assumption",
+        "work_object",
+        "completion",
+        "next_action",
+        "phase",
+        "evidence"
+      ]
+    },
+    "statement": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "source_ref": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "scope": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "status": { "enum": ["active", "superseded", "disputed", "unverified"] },
+    "authority": { "enum": ["user", "verified_evidence", "agent_inference"] },
+    "verification": { "enum": ["verified", "unverified", "stale", "unavailable"] },
+    "supersedes": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 32,
+      "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+    },
+    "superseded_by": {
+      "type": ["string", "null"],
+      "maxLength": 256
+    },
+    "confidence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "evidence_digest": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provider": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "origin_authority": { "type": ["string", "null"], "maxLength": 64 },
+    "redacted": { "type": "boolean" },
+    "truncated": { "type": "boolean" }
+  }
+}

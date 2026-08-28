@@ -1,0 +1,33 @@
+{
+  "name": "context-continuity",
+  "version": "0.1.0+codex.20260829002925",
+  "description": "Preserve and verify task invariants across compaction, resume, and agent handoffs.",
+  "author": {
+    "name": "Song Luo"
+  },
+  "keywords": [
+    "context",
+    "continuity",
+    "compaction",
+    "handoff",
+    "recovery"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Context Continuity",
+    "shortDescription": "Track source-aware task state across compaction and resume.",
+    "longDescription": "Stores and checks a small, local, source-aware task-state ledger across context compaction, session resume, and subagent handoff.",
+    "developerName": "Song Luo",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Show the current continuity state.",
+      "Protect this task across compaction.",
+      "Export a minimal agent handoff."
+    ]
+  }
+}
