@@ -154,6 +154,10 @@ assert.equal(packageJson.repository.url,
   "git+https://github.com/rrrrrredy/context-continuity.git");
 assert.equal(packageJson.scripts.test, "node scripts/run-core-tests.mjs");
 assert.equal(
+  packageJson.scripts["test:dsh"],
+  "node --test --test-concurrency=1 adapters/deepseek-harness/test/adapter.test.mjs"
+);
+assert.equal(
   packageJson.dsh?.bundle?.patch,
   "./adapters/deepseek-harness/cordis.patch.yml"
 );

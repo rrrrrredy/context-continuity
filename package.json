@@ -29,7 +29,7 @@
     "verify:lifecycle:auto": "node scripts/verify-real-lifecycle.mjs --mode auto --output validation/real-auto.json",
     "verify:installed": "node scripts/verify-installed-package.mjs --output validation/installed-package.json",
     "verify:installed-host": "node scripts/verify-installed-host-read.mjs --output validation/installed-host-read.json",
-    "test:dsh": "node --test --test-concurrency=1 adapters/deepseek-harness/test",
+    "test:dsh": "node --test --test-concurrency=1 adapters/deepseek-harness/test/adapter.test.mjs",
     "verify:dsh:package": "node scripts/verify-dsh-package.mjs --output validation/dsh-package.json",
     "verify:dsh:lifecycle": "node scripts/verify-dsh-lifecycle.mjs --output validation/dsh-real-lifecycle.json"
   },
