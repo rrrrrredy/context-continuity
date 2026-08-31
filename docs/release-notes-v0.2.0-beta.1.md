@@ -18,6 +18,8 @@ Status: release candidate; publish only after the public multi-OS CI gate passes
 - Added `macos-latest` to the complete Node 20/22 CI matrix.
 - Added macOS installation, removal, support, and verification-boundary
   documentation.
+- Made core test discovery Node 20/22 compatible and release digests stable
+  across LF/CRLF text checkouts without changing unknown binary bytes.
 - Updated the three-product integration contract to remain read-only and
   single-owner.
 

@@ -32,7 +32,8 @@ All notable changes are documented here. This project follows Semantic Versionin
   an earlier exact confirmation after an unrelated intervening message.
 - DSH lifecycle receipts are derived from a structured integration observation,
   and direct Windows package verification no longer spawns `npm.cmd`.
-
+- Core test discovery now works identically on Node 20 and 22, and release
+  digests canonicalize known text line endings while preserving binary bytes.
 
 ### Security
 

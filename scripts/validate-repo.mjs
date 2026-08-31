@@ -80,6 +80,7 @@ const required = [
   "docs/platform/macos-support-2026-08-31.md",
   "scripts/benchmark-hook.mjs",
   "scripts/artifact-digests.mjs",
+  "scripts/run-core-tests.mjs",
   "scripts/verify-installed-host-read.mjs",
   "scripts/verify-dsh-package.mjs",
   "scripts/verify-dsh-lifecycle.mjs"
@@ -151,6 +152,7 @@ assert.equal(packageJson.license, "Apache-2.0");
 assert.equal(packageJson.private, true);
 assert.equal(packageJson.repository.url,
   "git+https://github.com/rrrrrredy/context-continuity.git");
+assert.equal(packageJson.scripts.test, "node scripts/run-core-tests.mjs");
 assert.equal(
   packageJson.dsh?.bundle?.patch,
   "./adapters/deepseek-harness/cordis.patch.yml"

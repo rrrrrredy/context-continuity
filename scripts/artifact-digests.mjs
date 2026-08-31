@@ -3,6 +3,22 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+const CANONICAL_TEXT_EXTENSIONS = new Set([
+  ".js",
+  ".json",
+  ".md",
+  ".mjs",
+  ".toml",
+  ".txt",
+  ".yaml",
+  ".yml"
+]);
+const CANONICAL_TEXT_BASENAMES = new Set([
+  ".gitattributes",
+  ".gitignore",
+  "LICENSE"
+]);
+
 function sha256Buffer(value) {
   return crypto.createHash("sha256").update(value).digest("hex");
 }
@@ -24,6 +40,16 @@ function canonicalJson(value) {
   return JSON.stringify(canonicalize(value));
 }
 
+function canonicalFileContent(relative, content) {
+  const basename = path.posix.basename(relative);
+  const extension = path.posix.extname(relative).toLowerCase();
+  if (!CANONICAL_TEXT_BASENAMES.has(basename)
+      && !CANONICAL_TEXT_EXTENSIONS.has(extension)) {
+    return content;
+  }
+  return Buffer.from(content.toString("utf8").replaceAll("\r\n", "\n"), "utf8");
+}
+
 async function treeManifest(root, exclude = () => false) {
   const resolvedRoot = path.resolve(root);
   const files = [];
@@ -42,7 +68,10 @@ async function treeManifest(root, exclude = () => false) {
       if (entry.isDirectory()) {
         await visit(target);
       } else if (entry.isFile()) {
-        const content = await fs.readFile(target);
+        const content = canonicalFileContent(
+          relative,
+          await fs.readFile(target)
+        );
         files.push({
           path: relative,
           bytes: content.length,

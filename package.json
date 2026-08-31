@@ -18,7 +18,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test --test-concurrency=1 test",
+    "test": "node scripts/run-core-tests.mjs",
     "validate": "node scripts/validate-repo.mjs",
     "smoke:hooks": "node scripts/smoke-hooks.mjs",
     "smoke:mcp": "node scripts/smoke-mcp.mjs",
