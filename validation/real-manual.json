@@ -3,107 +3,22 @@
   "run_kind": "real_codex_lifecycle",
   "mode": "manual",
   "verified": true,
-  "started_at": "2026-08-28T16:40:11.322Z",
-  "completed_at": "2026-08-28T16:40:42.130Z",
+  "started_at": "2026-08-31T06:36:40.821Z",
+  "completed_at": "2026-08-31T06:37:06.247Z",
   "codex_version": "codex-cli 0.150.0-alpha.8",
   "plugin_runtime": "source_checkout",
   "app_server_method": "thread/compact/start",
   "model": "gpt-5.4-mini",
-  "source_tree_sha256": "890a15c89dac89e4e4b7958fd8a6dea643d25f58f0551cb6cbf936f3a2816325",
-  "source_plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
-  "plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
-  "source_tree_file_count": 80,
+  "source_tree_sha256": "2d2fcea5d713fb4035d03a928a7d4c89ccb4336171a263bd283f4f70e4028cff",
+  "source_plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "source_tree_file_count": 89,
   "plugin_package_file_count": 18,
-  "scratch_hook_config_sha256": "546aaec1e08b1e35ddc0e6fc6fd88891b0eae61b66fad2c06a4a2e16442e90d3",
-  "input_sha256": "11d9b161b0e6a8f63a663cffb6fba482a75ffaf3e3746e35e17a7eaea9859d1d",
-  "confirmation_prompt_sha256": "4589b2fa1ff45847f5821647137962d0238583c0931382415247d926a321c47b",
+  "scratch_hook_config_sha256": "400605a34ad5a3045f106e6d2d63c11dfe9d7634011e0d2c2d532c721c903f90",
+  "input_sha256": "f8105cae052fa52652e7e47d1230e8d9f6cd1bb8ed1756dbdf1132fb3def3cba",
+  "confirmation_prompt_sha256": "0e496deb85a93543f6c04d2cc90547ae17b95ea4ddf5f46cff3e6a15c41664e5",
   "readable_state_confirmation_used": true,
-  "preexisting_hook_listing": [
-    {
-      "event_name": "preCompact",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "postCompact",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionStart",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionEnd",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "userPromptSubmit",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "subagentStart",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "subagentStop",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "postCompact",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionStart",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionEnd",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "userPromptSubmit",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "stop",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    }
-  ],
+  "preexisting_hook_listing": [],
   "session_hook_events_injected": [
     "SessionStart",
     "UserPromptSubmit",
@@ -119,65 +34,65 @@
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 1006
+      "duration_ms": 795
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1053
+      "duration_ms": 951
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 713
+      "duration_ms": 844
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 748
+      "duration_ms": 925
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1565
+      "duration_ms": 751
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 1390
+      "duration_ms": 992
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1146
+      "duration_ms": 809
     }
   ],
   "unrelated_hook_ran": false,
   "context_compaction_items": [
     {
       "notification": "item/started",
-      "thread_id_sha256": "e1b266d7297086a131453723b253c7d1fe38da24a31a33d31553852c8e478c0b",
-      "turn_id_sha256": "2e3d4255b7ac6ec3dd5f9c9d7a1ae636c0e511671deeddb20d4a65044d036b2d",
-      "item_id_sha256": "cc85326202c8708f508e98211da9998e884e02664db0b91ee684cfea4a4968b8",
+      "thread_id_sha256": "e2f3717da4b91f651ef547f552d4b3a4310de184e37b4819747db398adcd329f",
+      "turn_id_sha256": "540ef6f42d7a5c6a0cff43e35f3750e28a1387a10f671e46daa5b4faecb210e3",
+      "item_id_sha256": "df9081c185d36273dc056d2187ad8525b221f4537de30a78050db1bc432f24a5",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "e1b266d7297086a131453723b253c7d1fe38da24a31a33d31553852c8e478c0b",
-      "turn_id_sha256": "2e3d4255b7ac6ec3dd5f9c9d7a1ae636c0e511671deeddb20d4a65044d036b2d",
-      "item_id_sha256": "cc85326202c8708f508e98211da9998e884e02664db0b91ee684cfea4a4968b8",
+      "thread_id_sha256": "e2f3717da4b91f651ef547f552d4b3a4310de184e37b4819747db398adcd329f",
+      "turn_id_sha256": "540ef6f42d7a5c6a0cff43e35f3750e28a1387a10f671e46daa5b4faecb210e3",
+      "item_id_sha256": "df9081c185d36273dc056d2187ad8525b221f4537de30a78050db1bc432f24a5",
       "item_type": "contextCompaction"
     }
   ],
@@ -204,7 +119,7 @@
       "classification": "continue_with_markers"
     }
   ],
-  "final_projection_digest": "81f0152bf4bb2182a301a8a32e91509ef0e47002cf71ca4fff18e1ce44676b83",
+  "final_projection_digest": "ad2000d82ca5a5641c18f329fa15dc18ef65847f04dc687ad7584843b79965d4",
   "final_generation": 1,
   "final_restore_classification": "continue_with_markers",
   "final_recovery_safe_to_continue": true,

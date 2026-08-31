@@ -3,107 +3,22 @@
   "run_kind": "real_codex_lifecycle",
   "mode": "auto",
   "verified": true,
-  "started_at": "2026-08-28T16:41:01.245Z",
-  "completed_at": "2026-08-28T16:42:28.191Z",
+  "started_at": "2026-08-31T06:37:28.361Z",
+  "completed_at": "2026-08-31T06:38:19.645Z",
   "codex_version": "codex-cli 0.150.0-alpha.8",
   "plugin_runtime": "source_checkout",
   "app_server_method": "model_auto_compact_token_limit",
   "model": "gpt-5.4-mini",
-  "source_tree_sha256": "890a15c89dac89e4e4b7958fd8a6dea643d25f58f0551cb6cbf936f3a2816325",
-  "source_plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
-  "plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
-  "source_tree_file_count": 80,
+  "source_tree_sha256": "2d2fcea5d713fb4035d03a928a7d4c89ccb4336171a263bd283f4f70e4028cff",
+  "source_plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "source_tree_file_count": 89,
   "plugin_package_file_count": 18,
-  "scratch_hook_config_sha256": "546aaec1e08b1e35ddc0e6fc6fd88891b0eae61b66fad2c06a4a2e16442e90d3",
-  "input_sha256": "8280e8b07fd948cb347a9b178a269bdb0a6a71272b9ed2acbca9f332ec4241f7",
-  "confirmation_prompt_sha256": "98fb3647ef3d6c665243b14942c6b73b44bf29849c594348bfcb453a76c83456",
+  "scratch_hook_config_sha256": "400605a34ad5a3045f106e6d2d63c11dfe9d7634011e0d2c2d532c721c903f90",
+  "input_sha256": "4606d623d012c6796e21548558093c1de292541a1fa65258dcbe6c692d65324e",
+  "confirmation_prompt_sha256": "8fc5b7b5dd1797a62b278af4dd2bcc75c17af576b11e01feae781655644b0524",
   "readable_state_confirmation_used": true,
-  "preexisting_hook_listing": [
-    {
-      "event_name": "preCompact",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "postCompact",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionStart",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionEnd",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "userPromptSubmit",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "subagentStart",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "subagentStop",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "postCompact",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionStart",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "sessionEnd",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "userPromptSubmit",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    },
-    {
-      "event_name": "stop",
-      "source": "plugin",
-      "is_managed": false,
-      "trust_status": "untrusted",
-      "enabled": true
-    }
-  ],
+  "preexisting_hook_listing": [],
   "session_hook_events_injected": [
     "SessionStart",
     "UserPromptSubmit",
@@ -119,142 +34,142 @@
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 729
+      "duration_ms": 731
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 819
+      "duration_ms": 1003
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 847
+      "duration_ms": 1555
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 624
+      "duration_ms": 764
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 739
+      "duration_ms": 948
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 667
+      "duration_ms": 1001
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 937
+      "duration_ms": 866
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1018
+      "duration_ms": 853
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 835
+      "duration_ms": 898
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 730
+      "duration_ms": 828
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 725
+      "duration_ms": 1037
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 653
+      "duration_ms": 707
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 711
+      "duration_ms": 815
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 649
+      "duration_ms": 775
     }
   ],
   "unrelated_hook_ran": false,
   "context_compaction_items": [
     {
       "notification": "item/started",
-      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
-      "turn_id_sha256": "15728d85a6afaebd54f9229f73f3dbcf821a2f49ff9d2e8f315a810d801732be",
-      "item_id_sha256": "8dbd28d3d6ee8fd5f2e2a69bbe3fbebc10fbdf24222db7e03887525d4c78883a",
+      "thread_id_sha256": "3800a749f5386ab71835d636804cc76d7539da4b44504a818f503896a9418a12",
+      "turn_id_sha256": "ed62339ba0a359506a76852f641b143a5891bce8d6c5d7ac1d388e849d1a7230",
+      "item_id_sha256": "bab12b2bd7ef79dbf5a6eb6e91d5506d10eb8e7d22195c78f413f9da7a5f4b41",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
-      "turn_id_sha256": "15728d85a6afaebd54f9229f73f3dbcf821a2f49ff9d2e8f315a810d801732be",
-      "item_id_sha256": "8dbd28d3d6ee8fd5f2e2a69bbe3fbebc10fbdf24222db7e03887525d4c78883a",
+      "thread_id_sha256": "3800a749f5386ab71835d636804cc76d7539da4b44504a818f503896a9418a12",
+      "turn_id_sha256": "ed62339ba0a359506a76852f641b143a5891bce8d6c5d7ac1d388e849d1a7230",
+      "item_id_sha256": "bab12b2bd7ef79dbf5a6eb6e91d5506d10eb8e7d22195c78f413f9da7a5f4b41",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/started",
-      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
-      "turn_id_sha256": "10146ca04c9f17685073a05b94ad899f2615c9216e363e000e1058de1b77749f",
-      "item_id_sha256": "993fdfb9caace0159152b7a8a0a4989592872c92cd52a4ce8b2fcbe0eb666ec5",
+      "thread_id_sha256": "3800a749f5386ab71835d636804cc76d7539da4b44504a818f503896a9418a12",
+      "turn_id_sha256": "50234ed212d37bbee68670a6159fbac85e10d3a37327e423e0fdfc509cdfd956",
+      "item_id_sha256": "69f2f29867132739b06798ad99c3a4d81ed25503e93f61b486eb74c7ba6af2e7",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
-      "turn_id_sha256": "10146ca04c9f17685073a05b94ad899f2615c9216e363e000e1058de1b77749f",
-      "item_id_sha256": "993fdfb9caace0159152b7a8a0a4989592872c92cd52a4ce8b2fcbe0eb666ec5",
+      "thread_id_sha256": "3800a749f5386ab71835d636804cc76d7539da4b44504a818f503896a9418a12",
+      "turn_id_sha256": "50234ed212d37bbee68670a6159fbac85e10d3a37327e423e0fdfc509cdfd956",
+      "item_id_sha256": "69f2f29867132739b06798ad99c3a4d81ed25503e93f61b486eb74c7ba6af2e7",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/started",
-      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
-      "turn_id_sha256": "b91cef2a1328ec7f51c4e1e092698a5dee0ed18fb3a0e22c65a51445dfd8908a",
-      "item_id_sha256": "36ddbfc1dd8735bb90225f01da2d1228d1ace92943b0e6e8940f49523a50ea5b",
+      "thread_id_sha256": "3800a749f5386ab71835d636804cc76d7539da4b44504a818f503896a9418a12",
+      "turn_id_sha256": "6555a21f8355f30bc9191f70e8acb1c5355c1012b149fae08030ed4f26cae9f9",
+      "item_id_sha256": "02d03c4de8266e1a85c62bfe0e203ffc34c5f9cb97a7405967db61b3ec97d0f7",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "4b3523e58d63e093af784358d9ed781900c8a43ca318fc1314d64a4872fd237d",
-      "turn_id_sha256": "b91cef2a1328ec7f51c4e1e092698a5dee0ed18fb3a0e22c65a51445dfd8908a",
-      "item_id_sha256": "36ddbfc1dd8735bb90225f01da2d1228d1ace92943b0e6e8940f49523a50ea5b",
+      "thread_id_sha256": "3800a749f5386ab71835d636804cc76d7539da4b44504a818f503896a9418a12",
+      "turn_id_sha256": "6555a21f8355f30bc9191f70e8acb1c5355c1012b149fae08030ed4f26cae9f9",
+      "item_id_sha256": "02d03c4de8266e1a85c62bfe0e203ffc34c5f9cb97a7405967db61b3ec97d0f7",
       "item_type": "contextCompaction"
     }
   ],
@@ -323,7 +238,7 @@
       "classification": "continue_with_markers"
     }
   ],
-  "final_projection_digest": "d24ab808241261715586646c5540bbc5e271af0d81686fe6fc26dd2ec9920e52",
+  "final_projection_digest": "9d0c2c5dc32956380d54376c6bdaca8ac1507c0fbb7817f7c16c85a2af527cce",
   "final_generation": 1,
   "final_restore_classification": "continue_with_markers",
   "final_recovery_safe_to_continue": true,

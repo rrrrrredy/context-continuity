@@ -2,13 +2,13 @@
   "schema_version": "1.0",
   "run_kind": "installed_package_e2e",
   "verified": true,
-  "verified_at": "2026-08-28T16:42:41.753Z",
-  "codex_version": "codex-cli 0.150.0-alpha.8",
-  "plugin_version": "0.1.0+codex.20260829002925",
-  "source_tree_sha256": "890a15c89dac89e4e4b7958fd8a6dea643d25f58f0551cb6cbf936f3a2816325",
-  "source_plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
-  "plugin_package_sha256": "0ee8a86aac044259490959d357caa8417675d77189e145d9f37724a3207068cb",
-  "source_tree_file_count": 80,
+  "verified_at": "2026-08-31T06:40:53.002Z",
+  "codex_version": "codex-cli 0.151.0-alpha.7.2",
+  "plugin_version": "0.2.0-beta.1+codex.20260831042041",
+  "source_tree_sha256": "2d2fcea5d713fb4035d03a928a7d4c89ccb4336171a263bd283f4f70e4028cff",
+  "source_plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "source_tree_file_count": 89,
   "plugin_package_file_count": 18,
   "installed_cache_layout": true,
   "mcp_namespace": "context_continuity",
@@ -28,5 +28,5 @@
   "task_bytes_remain_after_delete": false,
   "prompt_or_assistant_content_in_receipt": false,
   "persistent_hook_trust_change": false,
-  "task_ref_sha256": "e2438ad4610b398295e173306c49ffb4941686d9b79018b5d37533643be0b130"
+  "task_ref_sha256": "81e5d2be7c68c05705b54a78189fc07a272f7ea4e4a23125efcf4a508c74d163"
 }

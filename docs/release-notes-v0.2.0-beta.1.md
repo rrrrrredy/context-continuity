@@ -1,6 +1,6 @@
 # Context Continuity v0.2.0-beta.1
 
-Release date: 2026-08-31  
+Release date: 2026-08-31
 Status: release candidate; publish only after the public multi-OS CI gate passes
 
 ## What changed

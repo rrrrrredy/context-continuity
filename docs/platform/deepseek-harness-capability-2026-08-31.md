@@ -1,6 +1,6 @@
 # DeepSeek Harness capability record
 
-Date: 2026-08-31  
+Date: 2026-08-31
 Tested host contract: `@deepseek-ai/dsh 0.1.1-rc.2` family
 
 ## Capability matrix
