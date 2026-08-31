@@ -2,10 +2,10 @@
   "schema_version": "1.0",
   "run_kind": "installed_package_e2e",
   "verified": true,
-  "verified_at": "2026-08-31T06:58:02.834Z",
+  "verified_at": "2026-08-31T07:15:02.146Z",
   "codex_version": "codex-cli 0.151.0-alpha.7.2",
   "plugin_version": "0.2.0-beta.1+codex.20260831042041",
-  "source_tree_sha256": "aa130957b80391bb52d753a1d8356e1513dc649d9549bacb6f2836ddae843a61",
+  "source_tree_sha256": "c8c3fa77b234c703d3f83751d6a7153d95441cf10ede11affc7f79647795c721",
   "source_plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
   "plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
   "source_tree_file_count": 91,
@@ -28,5 +28,5 @@
   "task_bytes_remain_after_delete": false,
   "prompt_or_assistant_content_in_receipt": false,
   "persistent_hook_trust_change": false,
-  "task_ref_sha256": "9852d9826dfb99965fa17bde0c6db97cf8bd9ae9bd124cfa214a57e40576cc7b"
+  "task_ref_sha256": "22a20c11ac3b92d2f563d5283ef2a21a9df77f391615f11dc51999b36b6b7ce7"
 }

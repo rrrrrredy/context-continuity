@@ -3,20 +3,20 @@
   "run_kind": "real_codex_lifecycle",
   "mode": "auto",
   "verified": true,
-  "started_at": "2026-08-31T06:55:56.633Z",
-  "completed_at": "2026-08-31T06:57:02.419Z",
+  "started_at": "2026-08-31T07:12:54.413Z",
+  "completed_at": "2026-08-31T07:14:00.615Z",
   "codex_version": "codex-cli 0.150.0-alpha.8",
   "plugin_runtime": "source_checkout",
   "app_server_method": "model_auto_compact_token_limit",
   "model": "gpt-5.4-mini",
-  "source_tree_sha256": "aa130957b80391bb52d753a1d8356e1513dc649d9549bacb6f2836ddae843a61",
+  "source_tree_sha256": "c8c3fa77b234c703d3f83751d6a7153d95441cf10ede11affc7f79647795c721",
   "source_plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
   "plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
   "source_tree_file_count": 91,
   "plugin_package_file_count": 18,
   "scratch_hook_config_sha256": "546aaec1e08b1e35ddc0e6fc6fd88891b0eae61b66fad2c06a4a2e16442e90d3",
-  "input_sha256": "b21fcdea1836d1e004561fc996cc47c2debb84580e4e1e262b708d2d75a9410f",
-  "confirmation_prompt_sha256": "a25370f0f8cf2f603a305e3e10bae659287bf23a8bce76694d7d59f7673a8f10",
+  "input_sha256": "e7751ede50a4b0c43aa80e2a0bec23a60004392abf4a0013e32fa5ddf43e46d8",
+  "confirmation_prompt_sha256": "cfd1758187b1d3a4435abdc835d1bd5b3406f1a49a60d99879253727580a170d",
   "readable_state_confirmation_used": true,
   "preexisting_hook_listing": [],
   "session_hook_events_injected": [
@@ -34,142 +34,142 @@
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 710
+      "duration_ms": 2016
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 802
+      "duration_ms": 1415
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 859
+      "duration_ms": 1173
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 946
+      "duration_ms": 3115
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 850
+      "duration_ms": 2416
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 791
+      "duration_ms": 1535
     },
     {
       "event_name": "preCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 1278
+    },
+    {
+      "event_name": "postCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 989
+    },
+    {
+      "event_name": "sessionStart",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "thread",
+      "duration_ms": 1275
+    },
+    {
+      "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
       "duration_ms": 883
     },
     {
-      "event_name": "postCompact",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "turn",
-      "duration_ms": 849
-    },
-    {
-      "event_name": "sessionStart",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "thread",
-      "duration_ms": 876
-    },
-    {
-      "event_name": "userPromptSubmit",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "turn",
-      "duration_ms": 712
-    },
-    {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 812
+      "duration_ms": 818
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 2269
+      "duration_ms": 744
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 1392
+      "duration_ms": 901
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 966
+      "duration_ms": 820
     }
   ],
   "unrelated_hook_ran": false,
   "context_compaction_items": [
     {
       "notification": "item/started",
-      "thread_id_sha256": "5cda185a9d790e888861b5f42235fca6a7836425c49019d55e16e0bb2496cc66",
-      "turn_id_sha256": "f5ab0bad8c4d6cf8ee4c17e8abe03fc7fad0a24fc178720c39308b50628cf205",
-      "item_id_sha256": "54820f8198c37220dd193aded9201cb82bb8b59b3f27df26c414de34116c65ba",
+      "thread_id_sha256": "a06e63e52a406305234c9d7b7e239f3f453c799c1543b8880202884102f9da50",
+      "turn_id_sha256": "19aee3dabffceb6a4efafb11acb3df18ffaea17dae4cfce18bc9ebf8b0a13237",
+      "item_id_sha256": "c7f6fcf8ad0f5081806b6e2757687e5bcf985510f257e1e8925ef63d1c8e0b09",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "5cda185a9d790e888861b5f42235fca6a7836425c49019d55e16e0bb2496cc66",
-      "turn_id_sha256": "f5ab0bad8c4d6cf8ee4c17e8abe03fc7fad0a24fc178720c39308b50628cf205",
-      "item_id_sha256": "54820f8198c37220dd193aded9201cb82bb8b59b3f27df26c414de34116c65ba",
+      "thread_id_sha256": "a06e63e52a406305234c9d7b7e239f3f453c799c1543b8880202884102f9da50",
+      "turn_id_sha256": "19aee3dabffceb6a4efafb11acb3df18ffaea17dae4cfce18bc9ebf8b0a13237",
+      "item_id_sha256": "c7f6fcf8ad0f5081806b6e2757687e5bcf985510f257e1e8925ef63d1c8e0b09",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/started",
-      "thread_id_sha256": "5cda185a9d790e888861b5f42235fca6a7836425c49019d55e16e0bb2496cc66",
-      "turn_id_sha256": "81a4b41eecf09fdb16d9869684510b13d45e5f1549c4c6857de1cbd97b4a9f85",
-      "item_id_sha256": "0e55089b0a8d37759ee4f8ae517e571b3daaa1570ac5292ccde288a9065a3d88",
+      "thread_id_sha256": "a06e63e52a406305234c9d7b7e239f3f453c799c1543b8880202884102f9da50",
+      "turn_id_sha256": "c8be32061a7b376c9a5a0909ccdfa2dbb8a30b56ce4e961589c8d7f95f1e32f9",
+      "item_id_sha256": "a3692ebb1ef38c7d893062e16ee7a617e505cd8d105e85ad67db0345e0d9c97f",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "5cda185a9d790e888861b5f42235fca6a7836425c49019d55e16e0bb2496cc66",
-      "turn_id_sha256": "81a4b41eecf09fdb16d9869684510b13d45e5f1549c4c6857de1cbd97b4a9f85",
-      "item_id_sha256": "0e55089b0a8d37759ee4f8ae517e571b3daaa1570ac5292ccde288a9065a3d88",
+      "thread_id_sha256": "a06e63e52a406305234c9d7b7e239f3f453c799c1543b8880202884102f9da50",
+      "turn_id_sha256": "c8be32061a7b376c9a5a0909ccdfa2dbb8a30b56ce4e961589c8d7f95f1e32f9",
+      "item_id_sha256": "a3692ebb1ef38c7d893062e16ee7a617e505cd8d105e85ad67db0345e0d9c97f",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/started",
-      "thread_id_sha256": "5cda185a9d790e888861b5f42235fca6a7836425c49019d55e16e0bb2496cc66",
-      "turn_id_sha256": "d2f465bc8f30a742a27310e2d38d6188ff9cc978ac840e57f1912efcc323d3d8",
-      "item_id_sha256": "fe88c5136dfabc1aeb9b074828e3fb676fd23b7f5d435307b2ecc7f19ad8f4f3",
+      "thread_id_sha256": "a06e63e52a406305234c9d7b7e239f3f453c799c1543b8880202884102f9da50",
+      "turn_id_sha256": "99585be25d1cf19e2b2dd4cf9ee48f322387cc10af6600c1641f8c014e7a5836",
+      "item_id_sha256": "ec344836bef4d80c0e14d3da569f392503e6b8a7aa0c3939f206377a115f5db5",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "5cda185a9d790e888861b5f42235fca6a7836425c49019d55e16e0bb2496cc66",
-      "turn_id_sha256": "d2f465bc8f30a742a27310e2d38d6188ff9cc978ac840e57f1912efcc323d3d8",
-      "item_id_sha256": "fe88c5136dfabc1aeb9b074828e3fb676fd23b7f5d435307b2ecc7f19ad8f4f3",
+      "thread_id_sha256": "a06e63e52a406305234c9d7b7e239f3f453c799c1543b8880202884102f9da50",
+      "turn_id_sha256": "99585be25d1cf19e2b2dd4cf9ee48f322387cc10af6600c1641f8c014e7a5836",
+      "item_id_sha256": "ec344836bef4d80c0e14d3da569f392503e6b8a7aa0c3939f206377a115f5db5",
       "item_type": "contextCompaction"
     }
   ],
@@ -238,7 +238,7 @@
       "classification": "continue_with_markers"
     }
   ],
-  "final_projection_digest": "ff3f80a1a91cca155bda56f4562af35de060753729b49cda345b4af0b4b80909",
+  "final_projection_digest": "8024cfc154bffbb9b9662c4311d7708ecb82e742c3fee96fbf0dbc6556d3b8de",
   "final_generation": 1,
   "final_restore_classification": "continue_with_markers",
   "final_recovery_safe_to_continue": true,

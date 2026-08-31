@@ -3,20 +3,20 @@
   "run_kind": "real_codex_lifecycle",
   "mode": "manual",
   "verified": true,
-  "started_at": "2026-08-31T06:55:04.561Z",
-  "completed_at": "2026-08-31T06:55:34.490Z",
+  "started_at": "2026-08-31T07:11:59.143Z",
+  "completed_at": "2026-08-31T07:12:29.075Z",
   "codex_version": "codex-cli 0.150.0-alpha.8",
   "plugin_runtime": "source_checkout",
   "app_server_method": "thread/compact/start",
   "model": "gpt-5.4-mini",
-  "source_tree_sha256": "aa130957b80391bb52d753a1d8356e1513dc649d9549bacb6f2836ddae843a61",
+  "source_tree_sha256": "c8c3fa77b234c703d3f83751d6a7153d95441cf10ede11affc7f79647795c721",
   "source_plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
   "plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
   "source_tree_file_count": 91,
   "plugin_package_file_count": 18,
   "scratch_hook_config_sha256": "546aaec1e08b1e35ddc0e6fc6fd88891b0eae61b66fad2c06a4a2e16442e90d3",
-  "input_sha256": "847ec55d351b65db9c760aaf935b862e25231203315bd6c591f74ec3c2c05d85",
-  "confirmation_prompt_sha256": "ee8ef42f86872f7b3d67c31373118b536bdcea88d682f1d42c944b14fc4a1a49",
+  "input_sha256": "9d673e544c9938f507b5ccfa3561cfc7c88a3f4bfe261714a87795a33006ce6b",
+  "confirmation_prompt_sha256": "17d6cccb330c4947026fc9f9f616ed462b3afeef4116f46ca406b890b7167e38",
   "readable_state_confirmation_used": true,
   "preexisting_hook_listing": [],
   "session_hook_events_injected": [
@@ -34,65 +34,65 @@
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 753
+      "duration_ms": 1237
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1160
+      "duration_ms": 1280
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 763
+      "duration_ms": 1071
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 848
+      "duration_ms": 1791
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 703
+      "duration_ms": 1177
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 805
+      "duration_ms": 1760
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 741
+      "duration_ms": 1955
     }
   ],
   "unrelated_hook_ran": false,
   "context_compaction_items": [
     {
       "notification": "item/started",
-      "thread_id_sha256": "173a8c052c64c136110ef76393d70b4f9c36cb5334602d4a692475fccf1ca938",
-      "turn_id_sha256": "9d46590efe703ba626675a012b1fcf03ce81ce316af9a4ef06ec32d6ace4aa89",
-      "item_id_sha256": "3ebcfe9c6aaf133976e71d27cc743ce68c587cdf82fe72a5dbf37363956a15f5",
+      "thread_id_sha256": "8fcffe022489d221ab23bbf25edbdcd7786dd8abb561808d4cf32c16c222b4b5",
+      "turn_id_sha256": "0c6373b56121f8d60a7a7e0da8a98c62029ceae745b2e8a65b0dcf163c0bb6b4",
+      "item_id_sha256": "81c57d524a2dc359b3daf703d7c0673ba9f80a1761eac5cebff47983d84b9b35",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "173a8c052c64c136110ef76393d70b4f9c36cb5334602d4a692475fccf1ca938",
-      "turn_id_sha256": "9d46590efe703ba626675a012b1fcf03ce81ce316af9a4ef06ec32d6ace4aa89",
-      "item_id_sha256": "3ebcfe9c6aaf133976e71d27cc743ce68c587cdf82fe72a5dbf37363956a15f5",
+      "thread_id_sha256": "8fcffe022489d221ab23bbf25edbdcd7786dd8abb561808d4cf32c16c222b4b5",
+      "turn_id_sha256": "0c6373b56121f8d60a7a7e0da8a98c62029ceae745b2e8a65b0dcf163c0bb6b4",
+      "item_id_sha256": "81c57d524a2dc359b3daf703d7c0673ba9f80a1761eac5cebff47983d84b9b35",
       "item_type": "contextCompaction"
     }
   ],
@@ -119,7 +119,7 @@
       "classification": "continue_with_markers"
     }
   ],
-  "final_projection_digest": "2b730099aad16712b5d1f2b119e7b941866ea2782e07b5819742e638ace941cf",
+  "final_projection_digest": "029abe15f15f7de70dc3ef729df4d109bd4170518dc723d044395a05e63afaa0",
   "final_generation": 1,
   "final_restore_classification": "continue_with_markers",
   "final_recovery_safe_to_continue": true,
