@@ -3,20 +3,20 @@
   "run_kind": "real_codex_lifecycle",
   "mode": "manual",
   "verified": true,
-  "started_at": "2026-08-31T06:42:20.842Z",
-  "completed_at": "2026-08-31T06:42:43.897Z",
+  "started_at": "2026-08-31T07:00:01.170Z",
+  "completed_at": "2026-08-31T07:00:27.571Z",
   "codex_version": "codex-cli 0.150.0-alpha.8",
   "plugin_runtime": "installed_cache",
   "app_server_method": "thread/compact/start",
   "model": "gpt-5.4-mini",
-  "source_tree_sha256": "2d2fcea5d713fb4035d03a928a7d4c89ccb4336171a263bd283f4f70e4028cff",
-  "source_plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
-  "plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
-  "source_tree_file_count": 89,
+  "source_tree_sha256": "aa130957b80391bb52d753a1d8356e1513dc649d9549bacb6f2836ddae843a61",
+  "source_plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
+  "plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
+  "source_tree_file_count": 91,
   "plugin_package_file_count": 18,
-  "scratch_hook_config_sha256": "d3279b7d5227c061ebeb38bd1353e744f31bd3ad96cb5af9a34e28ff49fb8b22",
-  "input_sha256": "181a0694a9bfa92f01dd55afb10243b38ee5b0f774dcec304f4d6046db6c153d",
-  "confirmation_prompt_sha256": "4c8d3f3e91630897e29b7a11f6ff99949561c810f3bb59b3f176824197a77f61",
+  "scratch_hook_config_sha256": "9a8e55585e9bc3745f80ec24fdaf52940d18bc075eb3ed02dd3b71595e36f8dc",
+  "input_sha256": "08406fb1d2181762032ffeae25a5a7e763819446e171dc18c305f2a3d72a3e4e",
+  "confirmation_prompt_sha256": "7f5b04b938ba0d155e2850296661870fdd4182582bd94a17a3b8004a552ec21f",
   "readable_state_confirmation_used": true,
   "preexisting_hook_listing": [
     {
@@ -84,14 +84,42 @@
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 794
+      "duration_ms": 752
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 852
+      "duration_ms": 906
+    },
+    {
+      "event_name": "userPromptSubmit",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 794
+    },
+    {
+      "event_name": "preCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 798
+    },
+    {
+      "event_name": "postCompact",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "turn",
+      "duration_ms": 712
+    },
+    {
+      "event_name": "sessionStart",
+      "status": "completed",
+      "source": "sessionFlags",
+      "scope": "thread",
+      "duration_ms": 817
     },
     {
       "event_name": "userPromptSubmit",
@@ -99,50 +127,22 @@
       "source": "sessionFlags",
       "scope": "turn",
       "duration_ms": 770
-    },
-    {
-      "event_name": "preCompact",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "turn",
-      "duration_ms": 988
-    },
-    {
-      "event_name": "postCompact",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "turn",
-      "duration_ms": 747
-    },
-    {
-      "event_name": "sessionStart",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "thread",
-      "duration_ms": 816
-    },
-    {
-      "event_name": "userPromptSubmit",
-      "status": "completed",
-      "source": "sessionFlags",
-      "scope": "turn",
-      "duration_ms": 887
     }
   ],
   "unrelated_hook_ran": false,
   "context_compaction_items": [
     {
       "notification": "item/started",
-      "thread_id_sha256": "4609d79ee3b3ac8816e856c4015df8ad22441a16d10137c0acb298c1dc107868",
-      "turn_id_sha256": "a1ed88388182870930ed20f37224240e681f8cd0d223dc0b4ef4cabf540455cf",
-      "item_id_sha256": "854f5b141dab60193430a428f97c1ab6e43e8ee06ad0b02de18435e884370b7c",
+      "thread_id_sha256": "6b8fdbedfbe8fb8cbd7d04004f1c180ba87634ea88556f95aa9c291316783ad9",
+      "turn_id_sha256": "7ec2c13edc4df0d6cb4bf6b601f29886732dd2d2ab5735730ac85ae95894af0d",
+      "item_id_sha256": "020a54e3355a43f6f37f3c8d9a54c21b15694aaa536f33953544c7f8734df3d0",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "4609d79ee3b3ac8816e856c4015df8ad22441a16d10137c0acb298c1dc107868",
-      "turn_id_sha256": "a1ed88388182870930ed20f37224240e681f8cd0d223dc0b4ef4cabf540455cf",
-      "item_id_sha256": "854f5b141dab60193430a428f97c1ab6e43e8ee06ad0b02de18435e884370b7c",
+      "thread_id_sha256": "6b8fdbedfbe8fb8cbd7d04004f1c180ba87634ea88556f95aa9c291316783ad9",
+      "turn_id_sha256": "7ec2c13edc4df0d6cb4bf6b601f29886732dd2d2ab5735730ac85ae95894af0d",
+      "item_id_sha256": "020a54e3355a43f6f37f3c8d9a54c21b15694aaa536f33953544c7f8734df3d0",
       "item_type": "contextCompaction"
     }
   ],
@@ -169,7 +169,7 @@
       "classification": "continue_with_markers"
     }
   ],
-  "final_projection_digest": "35b84cc008a114c3f9d02b0f4013f82ff14e94f6fd715b09b7477b5ce0efa982",
+  "final_projection_digest": "c0339d9484549510b14f3f610e310292f235b1cc4ac56a2f9f566eb89d92d85c",
   "final_generation": 1,
   "final_restore_classification": "continue_with_markers",
   "final_recovery_safe_to_continue": true,
