@@ -1,113 +1,217 @@
 # Context Continuity 上下文连续性
 
-Context Continuity 是一个本地优先的 Codex 插件。它帮助长期任务在上下文压缩、
-会话恢复、clear 或子 Agent 交接后，仍沿着同一个目标、约束、用户纠正、工作对象、
-已验证进度和未解决分歧继续。
+[English](README.md) · [发布证据](docs/release-readiness.md) · [隐私与删除](docs/privacy.md)
 
-它不是聊天备份、完整记忆、用户画像、任务管理器、权限系统或第二套 Harness。
+Context Continuity 会保存长期 Agent 任务中最不能丢的少量信息，并在压缩、恢复或
+交接后核对它们，让 Agent 从正确的位置继续。
 
-## 为什么需要它
+Codex 和 DeepSeek Harness 共用同一套核心、状态格式和恢复规则，支持 Windows、
+macOS 与 Linux，不维护容易分叉的 Mac 特供版。
 
-平台摘要可以读起来很顺，却悄悄漏掉用户纠正、复活旧决定、抹平分歧，或者让 Agent
-在错误文件版本上继续。插件保存一份很小、带来源的任务投影，并在有损上下文转换前后
-核验。宿主摘要和外部交接只作为候选，不作为事实来源。
+## 它解决什么
+
+Agent 在压缩后可能还能流畅回答，却已经忘了真正目标、硬约束、用户纠正、决定理由、
+当前文件或版本，也可能把旧的下一步当成仍然有效。宿主摘要和记忆仍可参考，但不应
+直接成为任务事实。
+
+插件保存一份有界的任务状态投影，每条内容带来源、时间、有效状态、覆盖关系、冲突和
+验证状态。它不会复制完整对话，不做长期记忆，不接管规划，也不替宿主授予权限。
 
 ## 当前状态
 
-`0.1.0` 是可选择安装的 Codex 公开 Beta：
+`0.2.0-beta.1` 是发布候选；只有同名公开 tag 和 GitHub prerelease 已存在时，
+下面固定 tag 的安装命令才有效。
 
-- 已在 Windows 的 `codex-cli 0.150.0-alpha.8` 核验；
-- 源码包和安装缓存包都必须通过真实手动压缩与连续自动压缩发布门槛；
-- Hooks、MCP、Skill 兜底、持久化、脱敏、有界响应、精确用户确认、单任务删除和
-  卸载路径都有自动化或安装包检查；
-- 30 例评估协议已经冻结，但真实任务三臂效果评估尚未完成，所以本 Beta 不宣称
-  已测得返工、目标漂移或恢复时间下降；
-- 一次独立安装态短流程已通过普通静默、Protect、精确落盘、Show 和 Off；它也
-  观察到重复 Skill 读取与 30 至 60 秒级显式保护回合，因此当前仍定位为可选 Beta。
+| 宿主 / 平台 | 支持程度 |
+| --- | --- |
+| Codex | Beta 发布候选；测试 Windows 主机已有真实手动压缩和连续自动压缩生命周期收据 |
+| DeepSeek Harness | 开发者预览候选，固定兼容 `0.1.1-rc.2`；已验证发布版 Host API 生命周期和隔离安装包 |
+| Windows | 完整测试矩阵和真实 Codex 生命周期证据 |
+| macOS | 发布门槛：核心、Hook、MCP、打包、评估和 DSH 适配测试必须在 `macos-latest` 通过；真实 Mac Codex 自动压缩尚未验证 |
+| Linux | 发布门槛：核心、Hook、MCP、打包、评估和 DSH 适配测试必须在 `ubuntu-latest` 通过 |
 
-## 从 GitHub 安装
+三臂真实任务效果评估尚未完成。当前证据可以说明机制和失败边界可验证，还不能宣称已
+量化减少返工或目标漂移。
 
-要求：支持插件的 Codex、Node.js 20 或更新版本，以及查看本地 Hooks 的权限。
+## 安装到 Codex
 
-```powershell
-codex plugin marketplace add rrrrrredy/context-continuity --ref v0.1.0
+要求：支持插件与 Hooks 的 Codex、Node.js 20 或更新版本，并能检查本地 Hook。
+
+macOS、Linux 和 Windows 使用同样的命令：
+
+```sh
+codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.1
 codex plugin add context-continuity@context-continuity
 ```
 
-安装后打开 `/hooks`，检查命令，只信任当前精确 Hook 定义。然后开启新任务或重新
-进入要保护的任务即可。用户不需要手工维护摘要。
+安装后：
 
-```powershell
+1. 重启或重新进入 Codex 任务。
+2. 打开 `/hooks`。
+3. 检查安装缓存中的精确命令，只信任确认过的定义。
+4. 正常工作。普通回合保持静默，也不会额外调用模型。
+
+检查是否安装成功：
+
+```sh
 codex plugin list --json
-codex mcp get context_continuity --json
 ```
 
-MCP 命名空间使用下划线，产品名和插件名使用连字符。
+`codex plugin list --json` 的输出里必须能找到
+`context-continuity@context-continuity`。在 `/hooks` 中核对并信任安装缓存里的
+`SessionStart`、`UserPromptSubmit`、`PreCompact`、`PostCompact`、
+`SubagentStart`、`SubagentStop` 和 `SessionEnd` 七组 Hook。遇到
+`node not found` 就说明保护尚未生效。
 
-## 用户什么时候会感受到它
+在一次可丢弃的任务里做 60 秒无文件修改测试：
 
-- 普通工作：不刷状态，不调用额外模型。
-- 当稳定目标、约束、纠正或其他关键主张需要用户权威时：Agent 展示一条可读、
-  绑定当前 generation 的完整提案，请用户原样发送。只在用户明确要求保护状态，
-  或连续性风险会影响高风险动作时出现，不会每轮确认。
-- 压缩前：Hook 在本地写入最小快照。
-- 压缩或恢复后：从 ledger 恢复已验证不变量；旧的下一步总是先标记为陈旧，结合
-  当前目标、约束、工作对象和证据重新推导。低风险不确定性带标记继续；可能改变
-  范围、授权、发布、删除、外发或其他不可逆动作时，只问一个必要问题。
-- 用户纠正：确认后的新项覆盖旧项，但保留来源、分歧和覆盖关系。
+1. 说：“保护这个目标：只在本地完成测试。硬约束：不要修改文件。”
+2. 检查 Agent 给出的状态提案，把它要求的精确确认文本原样发回。
+3. 说：“显示当前连续性状态。”
+4. 只有目标和约束都显示为 `verified`，且没有文件被修改，才算安装成功。
 
-可以直接对 Agent 说：
+Mac 的证据边界见
+[macOS 支持说明](docs/platform/macos-support-2026-08-31.md)。
+
+## 安装到 DeepSeek Harness
+
+要求：DeepSeek Harness `0.1.1-rc.2`、Node.js 20 或更新版本，以及
+`pnpm`。把 `<profile>` 换成实际 profile：
+
+```sh
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.1
+dsh --profile <profile> --dump-config
+```
+
+配置输出必须出现 `id` 与 `name` 都为 `context-continuity` 的 layer/service。
+随后这样启动 profile：
+
+```sh
+dsh --profile <profile>
+```
+
+profile 启动后也可以使用上面的自然语言测试。
+
+如果安装时该 profile 已在运行，先重启它的进程，再做上面的测试。DSH 的 bundle
+patch 会加入适配器，不需要另一套状态格式。
+详见[适配器使用说明](adapters/deepseek-harness/README.md)和
+[能力核验记录](docs/platform/deepseek-harness-capability-2026-08-31.md)。
+
+## 用户会看到什么
+
+大部分时间什么都看不到。
+
+发生有损上下文转换时，插件会：
+
+1. 只保存当前仍有效的任务不变量；
+2. 记录这次转换是否完成；
+3. 在下一次模型步骤前恢复有界状态；
+4. 保留未解决冲突，不强行拼成共识；
+5. 把旧 `next_action` 标成失效，要求重新推导。
+
+可靠证据足以修复差异时自动恢复；不影响当前动作的低风险不确定性会被标记，并允许
+继续只读或可逆工作；可能改变目标、范围、授权、工作对象、发布、删除或其他不可逆
+动作时，只询问一个必要问题。
+
+技术小白可以直接说：
 
 - “显示当前连续性状态。”
 - “保护当前目标和约束。”
-- “刚才恢复的目标错了，正确的是……”
-- “导出这个子任务的最小交接。”
+- “这条恢复错了，正确内容是……”
+- “导出最小交接。”
 - “关闭这个任务的连续性保护。”
 - “删除这个任务的连续性状态。”
 
-off、on、reset 和 delete 都需要一条明确匹配的用户请求，再要求用户原样发送一次性
-确认短语。诊断 CLI 则要求两次提供完全相同、带命名空间的 `task_ref`。插件拒绝
-`current` 之类猜测别名。
-如果 prepare 结果丢失，同一条尚未过期的请求可以重发并生成新的 challenge，旧值立即
-失效；Agent 不得扫描日志、transcript、缓存、其他任务、插件数据或整个 `CODEX_HOME`
-来恢复 token。
+需要写入用户权威状态时，插件会给出一段可读的精确确认内容。用户检查后原样确认，
+模型转述或旧消息不能代替确认。
 
-## 数据和保证边界
+## 数据与保证边界
 
-- 每任务一个严格校验、追加式、带哈希链的 ledger；并发写入不使用最后写入覆盖。
-- 来源、时间、有效性、权威、验证、覆盖、分歧和不确定性保持显式。
-- 普通自然语言不能直接生成规范化的“用户权威状态”。用户必须对完整、可读提案做
-  第二次精确确认；Agent 改写只能作为未验证推断。
-- 每条非空提示最多保存 512 字符脱敏片段及哈希和长度，用于来源关联与风险审计，
-  不是语义证明；不复制完整 transcript。
-- 每次有损转换都让旧下一步失效，必须重新推导；高风险动作不确定时先问用户。
-- 给执行防偏插件的只读视图只导出已验证的下一步；stale 或 unverified 动作保留审计
-  记录，但不再作为可执行承诺。
-- 子 Agent 结果和外部 handoff 只作为候选。
-- 工作区核验包括有界的 tracked/untracked 内容哈希，不只看 Git HEAD 或 dirty 标记。
-- 公开 MCP 只有八个有界工具，不暴露 provider 凭据，也不能让模型自行铸造已验证证据。
-  跨产品协议已对齐，但 0.1.0 不宣称实时集成。
-- 所有 MCP 成功与错误响应都限制在 24 KiB 内；宿主 session/turn 标识只保存不可逆哈希。
-- 任务、快照、归档、锁和删除路径会拒绝符号链接与 Windows junction，避免越出插件
-  数据根读写。
-- 默认恢复上下文不超过约 800 tokens，硬上限 1500；无网络调用、遥测、向量库或云服务。
-- Hook 故障时 Codex 继续工作，但该次转换不再拥有连续性保证；ledger 损坏只让连续性
-  恢复拒绝继续，不阻断宿主的低风险工作。
+- 本地、按任务隔离的追加式 ledger，带哈希链核验。
+- 最多保留最近三个压缩快照。
+- 恢复投影默认 800 tokens，上限 1,500 tokens。
+- 不复制完整 transcript、隐藏推理或完整工具输出。
+- 平台摘要、检索结果、handoff 和子 Agent 输出只作为缓存或候选。
+- 每次有损转换都让旧动作游标失效。
+- Hook 或适配器故障时宿主继续运行，但该边界没有连续性保证。
+- ledger 损坏时不会恢复或继续写入。
+- 与其他插件的协议是只读、单一状态所有者；同时安装不等于自动集成。
 
-默认数据位于 `CODEX_HOME/plugin-data/context-continuity/v1`，按任务哈希隔离并只保留
-最近三个快照。详见[完整调研与 PRD](docs/prd.md)、[产品契约](docs/product-contract.md)、
-[三产品集成契约](docs/integration-contracts.md)、[隐私与删除](docs/privacy.md)和
-[发布证据](docs/release-readiness.md)。
+Codex 默认数据目录是
+`$CODEX_HOME/plugin-data/context-continuity/v1`；DSH 默认是
+`$DSH_HOME/plugin-data/context-continuity/v1`。隔离测试或托管环境可显式设置
+`CONTEXT_CONTINUITY_DATA_DIR`。
 
-## 卸载
+## 已有证据
 
-```powershell
+仓库发布门槛包含：
+
+- 88 个核心测试和 7 个 DSH 适配/集成测试；
+- 真实 Codex 手动压缩与连续自动压缩收据；
+- 字节一致的安装缓存生命周期收据；
+- 安装态宿主只读发现收据；
+- DSH 隔离 tarball 安装收据；
+- DSH 发布版 Host API 生命周期收据；
+- Hook、MCP、仓库、协议评估、依赖审计与多系统 CI。
+
+收据绑定当前源码树和插件包 SHA-256。协议 fixture 的结果不会被包装成产品效果。
+
+## 本地开发
+
+```sh
+npm ci
+npm test
+npm run test:dsh
+npm run smoke:hooks
+npm run smoke:mcp
+npm run eval:protocol
+npm run verify:dsh:package
+npm run verify:dsh:lifecycle
+npm run validate
+npm audit --audit-level=high
+```
+
+`plugins/context-continuity/` 是 Codex 安装包；根包同时包含 DeepSeek Harness
+适配器和 bundle patch。
+
+## 更新与卸载
+
+Codex 升级到 `<new-tag>`，本地 ledger 会保留：
+
+```sh
+codex plugin remove context-continuity@context-continuity
+codex plugin marketplace remove context-continuity
+codex plugin marketplace add rrrrrredy/context-continuity --ref <new-tag>
+codex plugin add context-continuity@context-continuity
+```
+
+DeepSeek Harness 升级到 `<new-tag>`：
+
+```sh
+dsh plugin --profile <profile> remove context-continuity
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#<new-tag>
+```
+
+只卸载 Codex，不删除 ledger：
+
+```sh
 codex plugin remove context-continuity@context-continuity
 codex plugin marketplace remove context-continuity
 ```
 
-卸载不会悄悄删除任务 ledger。若要彻底删除数据，应先让插件按任务删除，或在核验准确
-路径后另行删除 `CODEX_HOME/plugin-data/context-continuity`。
+只卸载 DSH，不删除 ledger：
 
-本项目使用 Apache License 2.0：允许商业和私有使用，包含明确专利授权，并要求保留
-许可证声明。
+```sh
+dsh plugin --profile <profile> remove context-continuity
+```
+
+卸载不会悄悄删掉任务 ledger。需要彻底清理时，先说“删除这个任务的连续性状态”，
+把第二次精确确认原样发回，并核对该任务状态已经消失。只有插件无法运行时才手工
+解析并检查精确数据路径，再删除 `plugin-data/context-continuity`；详见
+[隐私与删除](docs/privacy.md)。
+
+## 许可证
+
+Apache License 2.0，允许商业和私有使用，具体以许可证条款为准。可在
+[GitHub Issues](https://github.com/rrrrrredy/context-continuity/issues)
+提交可复现问题。

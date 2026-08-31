@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node: [20, 22]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
@@ -31,6 +31,12 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Run unit and contract tests
         run: npm test
+      - name: Exercise DeepSeek Harness adapter and published host APIs
+        run: npm run test:dsh
+      - name: Verify isolated DeepSeek Harness package install
+        run: npm run verify:dsh:package
+      - name: Verify DeepSeek Harness lifecycle receipt
+        run: npm run verify:dsh:lifecycle
       - name: Validate repository contracts
         run: npm run validate
       - name: Exercise Hook process boundary

@@ -12,7 +12,7 @@
 | PostCompact | 原生事件 | 记录转换完成及快照配对 |
 | SessionStart(source: compact) | 原生事件，在 compact 后下一次模型请求前运行 | 核验并注入最小恢复上下文 |
 | SessionStart(source: resume/clear) | 原生事件 | resume 核验；clear 使当前状态失效 |
-| UserPromptSubmit | 原生事件，可添加上下文 | 每条非空提示记录有界脱敏来源并给出短 task/source 绑定；变化信号只决定是否更新有效投影 |
+| UserPromptSubmit | 原生事件，可添加上下文 | 每条非空提示只记录哈希、长度和信号；仅风险信号保留有界脱敏片段并给出短 task/source 绑定 |
 | SubagentStart/Stop | 原生事件 | 输出最小 capsule；返回结果只作候选 |
 | SessionEnd(reason: other) | 原生事件，只对主线程运行 | 记录 advisory 结束事件；不清理或提升长期记忆 |
 | App Server thread/compact/start | 原生方法 | 驱动真实手动压缩验证 |

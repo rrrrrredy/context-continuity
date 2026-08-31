@@ -2,6 +2,53 @@
 
 All notable changes are documented here. This project follows Semantic Versioning.
 
+## [0.2.0-beta.1] - 2026-08-31
+
+### Added
+
+- DeepSeek Harness adapter for the pinned published `0.1.1-rc.2` Cordis,
+  AgentRegistry, Session, SystemPrompt, and ToolRuntime contracts.
+- DSH native tools with host-bound task, workspace, and user-source identity.
+- DSH compaction start/end observation, explicit summary-content exclusion, and
+  bounded recovery through the awaited `agent/pre-step` waterfall.
+- Isolated DSH tarball install verification and published Host API lifecycle
+  receipts.
+- macOS Node 20/22 CI for the full core, adapter, repository, Hook, MCP, eval, and
+  dependency-audit matrix.
+- macOS and DSH installation, removal, capability, evidence, and failure-boundary
+  documentation.
+
+### Changed
+
+- Core task references and provenance are host-namespaced while preserving the
+  existing Codex behavior.
+- Public MCP server helpers are reusable by host-native adapters.
+- Three-product contract now aligns with Execution Fidelity Guard v0.2 while
+  retaining one intent owner, read-only Guard input, and no live bridge.
+- Release version advanced to `0.2.0-beta.1`.
+- Ordinary prompts now persist only hash, length, and signals; a bounded
+  redacted excerpt is retained only for material continuity-risk signals.
+- DSH source matching keeps at most eight content-free observations and can use
+  an earlier exact confirmation after an unrelated intervening message.
+- DSH lifecycle receipts are derived from a structured integration observation,
+  and direct Windows package verification no longer spawns `npm.cmd`.
+
+
+### Security
+
+- DSH state-changing tools no longer expose `task_ref`, `cwd`, or
+  `source_event_id`; the host adapter supplies trusted values.
+- The DSH adapter does not persist unknown custom session events and fails open
+  on bounded adapter errors.
+
+### Known limitations
+
+- Real-task three-arm efficacy evaluation remains incomplete.
+- Authenticated real Mac Codex manual/automatic compaction is not yet verified.
+- DSH CLI profile installation and engine-generated automatic compaction are not
+  yet release receipts.
+- DSH compatibility is pinned to `0.1.1-rc.2`.
+
 ## [0.1.0] - 2026-08-28
 
 ### Added
@@ -48,3 +95,5 @@ All notable changes are documented here. This project follows Semantic Versionin
 - Codex is the only supported host in this release.
 
 [0.1.0]: https://github.com/rrrrrredy/context-continuity/releases/tag/v0.1.0
+
+[0.2.0-beta.1]: https://github.com/rrrrrredy/context-continuity/releases/tag/v0.2.0-beta.1

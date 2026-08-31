@@ -2,9 +2,10 @@
 
 ## Supported releases
 
-Security fixes are applied to the latest tagged `0.1.x` release. This project is
-an early public release; users should upgrade before reporting an issue already
-fixed on `main`.
+Security fixes are applied to the latest tagged `0.2.x` prerelease. Codex is
+the primary beta host; DeepSeek Harness support is developer preview and pinned
+to the host version named in the release notes. Upgrade before reporting an
+issue already fixed on `main`.
 
 ## Report a vulnerability
 
@@ -14,7 +15,7 @@ issue.
 
 Please include:
 
-- affected version and Codex version;
+- affected plugin version, host type, host version, and adapter version if applicable;
 - operating system and installation source;
 - the smallest redacted reproduction;
 - whether the issue can expose state across tasks, bypass provenance checks,
@@ -25,8 +26,9 @@ There is no guaranteed response SLA.
 
 ## Security boundary
 
-Context Continuity runs local Node.js processes with the permissions Codex grants
-to plugin Hooks and MCP servers. It does not authenticate users, sandbox Codex,
-decide tool permissions, or protect against a malicious local administrator.
-Treat its state as task metadata, not a secret vault. See
-[`docs/privacy.md`](docs/privacy.md) for storage and deletion behavior.
+Context Continuity runs local Node.js processes with the permissions the host
+grants to Codex Hooks/MCP servers or the DeepSeek Harness plugin layer. It does
+not authenticate users, sandbox the host, decide tool permissions, or protect
+against a malicious local administrator. Treat its state as task metadata, not
+a secret vault. See [`docs/privacy.md`](docs/privacy.md) for storage and
+deletion behavior.

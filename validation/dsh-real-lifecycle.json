@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_kind": "dsh_published_host_api_lifecycle",
+  "verified": true,
+  "verified_at": "2026-08-31T06:33:44.626Z",
+  "platform": "win32",
+  "architecture": "x64",
+  "node_version": "v20.19.1",
+  "package_version": "0.2.0-beta.1+codex.20260831042041",
+  "source_tree_sha256": "7a1336ded0cacd46068b98783fead6fe952aac2301b35a5b3018f6d70e402e9f",
+  "source_plugin_package_sha256": "08fffedd2390db420f733aada4830c99ad3d2523fd232351b7414598190fcab2",
+  "host_packages": {
+    "cordis": "4.0.2",
+    "agent": "0.1.1-rc.2",
+    "llm": "0.1.1-rc.2",
+    "session": "0.1.1-rc.2",
+    "system_prompt": "0.1.1-rc.2",
+    "tools": "0.1.1-rc.2"
+  },
+  "native_tool_confirmation_completed": true,
+  "validated_session_compaction_events_completed": true,
+  "pre_step_recovery_injected": true,
+  "stale_next_action_removed_from_guard_view": true,
+  "trusted_inbox_source_bound_without_model_argument": true,
+  "platform_summary_ignored_as_truth": true,
+  "automatic_compaction_engine_triggered": false,
+  "dsh_cli_profile_install_exercised": false,
+  "persistent_dsh_profile_changed": false,
+  "prompt_or_assistant_content_in_receipt": false
+}

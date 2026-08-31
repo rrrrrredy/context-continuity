@@ -44,6 +44,15 @@ const PATTERNS = [
     pattern: /\b(?:disagree|not convinced|unresolved disagreement)\b|不同意|有分歧|尚未解决/iu
   }
 ];
+const EXCERPT_SIGNALS = new Set([
+  "reset",
+  "correction",
+  "goal_change",
+  "constraint",
+  "authorization",
+  "dispute"
+]);
+
 
 export function detectPromptSignals(prompt, projection) {
   const text = String(prompt || "");
@@ -64,7 +73,7 @@ export function detectPromptSignals(prompt, projection) {
 export function promptSignalPayload(prompt, projection) {
   const text = String(prompt || "");
   const signals = detectPromptSignals(text, projection);
-  const shouldStoreExcerpt = text.trim().length > 0;
+  const shouldStoreExcerpt = signals.some((signal) => EXCERPT_SIGNALS.has(signal));
   const redacted = shouldStoreExcerpt
     ? redactText(text, MAX_PROMPT_EXCERPT_CHARS)
     : {

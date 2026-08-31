@@ -30,6 +30,10 @@ const required = [
   pluginPath("skills/context-continuity/SKILL.md"),
   pluginPath("src/mcp-server.mjs"),
   pluginPath("LICENSE"),
+  "adapters/deepseek-harness/index.js",
+  "adapters/deepseek-harness/cordis.patch.yml",
+  "adapters/deepseek-harness/README.md",
+  "adapters/deepseek-harness/test/adapter.test.mjs",
   "LICENSE",
   "SECURITY.md",
   "CONTRIBUTING.md",
@@ -56,6 +60,8 @@ const required = [
   "validation/installed-host-read.json",
   "validation/real-installed-manual.json",
   "validation/real-installed-auto.json",
+  "validation/dsh-package.json",
+  "validation/dsh-real-lifecycle.json",
   "docs/product-contract.md",
   "docs/integration-contracts.md",
   "docs/prd.md",
@@ -67,11 +73,16 @@ const required = [
   "docs/implementation-status.md",
   "docs/release-readiness.md",
   "docs/release-notes-v0.1.0.md",
+  "docs/release-notes-v0.2.0-beta.1.md",
   "docs/user-pilot-2026-08-29.md",
   "docs/platform/codex-capability-2026-08-28.md",
+  "docs/platform/deepseek-harness-capability-2026-08-31.md",
+  "docs/platform/macos-support-2026-08-31.md",
   "scripts/benchmark-hook.mjs",
   "scripts/artifact-digests.mjs",
-  "scripts/verify-installed-host-read.mjs"
+  "scripts/verify-installed-host-read.mjs",
+  "scripts/verify-dsh-package.mjs",
+  "scripts/verify-dsh-lifecycle.mjs"
 ];
 
 for (const relative of required) {
@@ -97,7 +108,9 @@ const jsonFiles = [
   "validation/installed-package.json",
   "validation/installed-host-read.json",
   "validation/real-installed-manual.json",
-  "validation/real-installed-auto.json"
+  "validation/real-installed-auto.json",
+  "validation/dsh-package.json",
+  "validation/dsh-real-lifecycle.json"
 ];
 const parsed = new Map();
 for (const relative of jsonFiles) {
@@ -138,6 +151,30 @@ assert.equal(packageJson.license, "Apache-2.0");
 assert.equal(packageJson.private, true);
 assert.equal(packageJson.repository.url,
   "git+https://github.com/rrrrrredy/context-continuity.git");
+assert.equal(
+  packageJson.dsh?.bundle?.patch,
+  "./adapters/deepseek-harness/cordis.patch.yml"
+);
+assert.equal(packageJson.main, "./adapters/deepseek-harness/index.js");
+assert.equal(
+  packageJson.exports?.["./deepseek-harness"],
+  "./adapters/deepseek-harness/index.js"
+);
+assert.deepEqual(packageJson.dependencies || {}, {});
+assert.deepEqual(packageJson.peerDependencies, {
+  "@deepseek-ai/dsh-llm": "0.1.1-rc.2",
+  "@deepseek-ai/dsh-tools": "0.1.1-rc.2"
+});
+for (const dependency of [
+  "@deepseek-ai/cordis",
+  "@deepseek-ai/dsh-agent",
+  "@deepseek-ai/dsh-llm",
+  "@deepseek-ai/dsh-session",
+  "@deepseek-ai/dsh-system-prompt",
+  "@deepseek-ai/dsh-tools"
+]) {
+  assert.ok(packageJson.devDependencies?.[dependency]);
+}
 const rootLicense = await fs.readFile(path.join(root, "LICENSE"), "utf8");
 const packagedLicense = await fs.readFile(
   path.join(root, pluginPath("LICENSE")),
@@ -154,6 +191,18 @@ assert.equal(marketplaceEntry.source.path, "./plugins/context-continuity");
 assert.equal(marketplaceEntry.policy.installation, "AVAILABLE");
 assert.equal(marketplaceEntry.policy.authentication, "ON_INSTALL");
 assert.equal(marketplaceEntry.category, "Productivity");
+
+const dshPatch = await fs.readFile(
+  path.join(root, "adapters", "deepseek-harness", "cordis.patch.yml"),
+  "utf8"
+);
+assert.match(dshPatch, /id: context-continuity/);
+assert.match(dshPatch, /name: context-continuity/);
+const ciWorkflow = await fs.readFile(
+  path.join(root, ".github", "workflows", "ci.yml"), "utf8");
+assert.match(ciWorkflow, /macos-latest/);
+assert.match(ciWorkflow, /npm run test:dsh/);
+assert.match(ciWorkflow, /npm run verify:dsh:package/);
 
 const mcp = parsed.get(pluginPath(".mcp.json"));
 const server = mcp.mcpServers?.context_continuity;
@@ -304,6 +353,56 @@ assert.equal(installedHost.persistent_hook_trust_change, false);
 assert.equal(installedHost.codex_configuration_unchanged, true);
 assert.equal(installedHost.prompt_or_assistant_content_in_receipt, false);
 
+function assertDshSourceBinding(receipt, relative) {
+  assert.match(receipt.source_tree_sha256 || "", /^[a-f0-9]{64}$/,
+    relative + " is missing source_tree_sha256.");
+  assert.match(receipt.source_plugin_package_sha256 || "", /^[a-f0-9]{64}$/,
+    relative + " is missing source_plugin_package_sha256.");
+  assert.equal(receipt.source_tree_sha256, artifactDigests.source_tree_sha256,
+    relative + " does not bind the current release source tree.");
+  assert.equal(receipt.source_plugin_package_sha256, artifactDigests.plugin_package_sha256,
+    relative + " does not bind the current source plugin package.");
+}
+
+const dshPackage = parsed.get("validation/dsh-package.json");
+assertDshSourceBinding(dshPackage, "validation/dsh-package.json");
+assert.equal(dshPackage.run_kind, "dsh_isolated_package_install");
+assert.equal(dshPackage.verified, true);
+assert.equal(dshPackage.dsh_compatibility, "0.1.1-rc.2");
+assert.match(dshPackage.npm_tarball_sha256 || "", /^[a-f0-9]{64}$/);
+assert.ok(dshPackage.npm_tarball_file_count >= 20);
+assert.equal(dshPackage.required_files_verified, 8);
+assert.equal(dshPackage.bundle_patch_verified, true);
+assert.equal(dshPackage.installed_module_imported, true);
+assert.equal(dshPackage.host_runtime_dependencies_are_peers, true);
+assert.equal(dshPackage.install_scripts_executed, false);
+assert.equal(dshPackage.persistent_dsh_profile_changed, false);
+assert.equal(dshPackage.global_install_changed, false);
+assert.equal(dshPackage.scratch_removed, true);
+assert.equal(dshPackage.prompt_or_assistant_content_in_receipt, false);
+
+const dshLifecycle = parsed.get("validation/dsh-real-lifecycle.json");
+assertDshSourceBinding(dshLifecycle, "validation/dsh-real-lifecycle.json");
+assert.equal(dshLifecycle.run_kind, "dsh_published_host_api_lifecycle");
+assert.equal(dshLifecycle.verified, true);
+assert.deepEqual(dshLifecycle.host_packages, {
+  cordis: "4.0.2",
+  agent: "0.1.1-rc.2",
+  llm: "0.1.1-rc.2",
+  session: "0.1.1-rc.2",
+  system_prompt: "0.1.1-rc.2",
+  tools: "0.1.1-rc.2"
+});
+assert.equal(dshLifecycle.native_tool_confirmation_completed, true);
+assert.equal(dshLifecycle.validated_session_compaction_events_completed, true);
+assert.equal(dshLifecycle.pre_step_recovery_injected, true);
+assert.equal(dshLifecycle.stale_next_action_removed_from_guard_view, true);
+assert.equal(dshLifecycle.trusted_inbox_source_bound_without_model_argument, true);
+assert.equal(dshLifecycle.platform_summary_ignored_as_truth, true);
+assert.equal(dshLifecycle.automatic_compaction_engine_triggered, false);
+assert.equal(dshLifecycle.dsh_cli_profile_install_exercised, false);
+assert.equal(dshLifecycle.persistent_dsh_profile_changed, false);
+assert.equal(dshLifecycle.prompt_or_assistant_content_in_receipt, false);
 const runtimeFiles = [
   pluginPath("src/constants.mjs"),
   pluginPath("src/model.mjs"),
@@ -311,12 +410,29 @@ const runtimeFiles = [
   pluginPath("src/service.mjs"),
   pluginPath("src/hook-handler.mjs"),
   pluginPath("src/store.mjs"),
-  pluginPath("hooks/run.mjs")
+  pluginPath("hooks/run.mjs"),
+  "adapters/deepseek-harness/index.js"
 ];
 const runtimeText = (await Promise.all(runtimeFiles.map((relative) =>
   fs.readFile(path.join(root, relative), "utf8")))).join("\n");
 assert.doesNotMatch(runtimeText, /transcript_path/);
 assert.doesNotMatch(runtimeText, /hidden.reasoning|chain.of.thought/i);
+const dshRuntime = await fs.readFile(path.join(root, "adapters/deepseek-harness/index.js"), "utf8");
+assert.doesNotMatch(dshRuntime, /session\.append\s*\(/);
+const dshVerifierText = await fs.readFile(
+  path.join(root, "scripts/verify-dsh-lifecycle.mjs"),
+  "utf8"
+);
+assert.match(dshVerifierText, /CONTEXT_CONTINUITY_DSH_OBSERVATION_PATH/);
+for (const field of [
+  "native_tool_confirmation_completed",
+  "validated_session_compaction_events_completed",
+  "pre_step_recovery_injected",
+  "stale_next_action_removed_from_guard_view",
+  "trusted_inbox_source_bound_without_model_argument"
+]) {
+  assert.doesNotMatch(dshVerifierText, new RegExp(field + "\\s*:\\s*true"));
+}
 assert.equal(MAX_PROMPT_EXCERPT_CHARS, 512);
 assert.equal(MAX_TOKEN_BUDGET, 1500);
 assert.equal(SNAPSHOT_RETENTION, 3);
@@ -337,7 +453,9 @@ process.stdout.write(JSON.stringify({
     "installed-package",
     "installed-host-read",
     "installed-manual",
-    "installed-auto"
+    "installed-auto",
+    "dsh-package",
+    "dsh-host-api-lifecycle"
   ],
   hook_events: expectedHooks,
   evaluation_cases: cases.length,

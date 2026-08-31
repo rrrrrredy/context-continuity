@@ -1,45 +1,72 @@
 # 实现状态
 
-本文件只记录可验证实现，不把协议测试写成产品效果。
+版本：`0.2.0-beta.1`
 
 ## 已实现
 
-- Codex 插件 manifest、默认 Hooks、Skill 和本地 stdio MCP；公共 MCP 为八个有界工具及一个只读 Skill 资源兜底。
-- 每任务 append-only 哈希链 ledger、严格 root/event allowlist、generation 并发控制、原子写、单任务锁和读前 8 MiB 限制。
-- 最小状态项、来源、有效性、类别、覆盖关系、冲突与验证状态。
-- `PreCompact` 快照、`PostCompact` 配对、compact/resume 核验及四级恢复分类。
-- `UserPromptSubmit` 增量信号、clear 失效、subagent capsule 与候选式导入。
-- 每条非空提示最多保存 512 字符脱敏片段、哈希、长度和信号，仅作来源关联和风险审计。
-- 用户权威状态使用完整、可读、generation-bound 的第二次精确确认；自然语言、引用、否定和 Agent 改写不能直接铸造用户权威。
-- off/on/reset/delete 全部使用明确请求、一次性 challenge 和第二条精确用户确认；delete 同时删除精确任务及其匹配归档。
-- challenge 和确认短语同时出现在 MCP 文本与结构化结果中；同一未过期请求可安全重发，旧 challenge 立即失效，Agent 无需也不得跨任务扫描日志或插件数据。
-- 每次 compact、resume 和 SessionEnd 都让旧 next_action 变 stale；恢复投影、持久状态和只读 Guard view 保持一致，只有 verified next_action 会成为 Guard 的开放承诺。
-- reset/clear 开始新有效状态时清空旧 snapshot、compaction、restore 与 subagent 生命周期指针；审计历史仍留在 ledger 或归档中。
-- 没有压缩快照的 resume 会对比 SessionEnd 与当前工作区指纹；tracked/untracked 有界内容变化会让依赖工作区的完成、证据和下一步陈旧。
-- 已消费的用户提示事件不能重复授权；外部 handoff 和子 Agent 输出保持 candidate-only。
-- 默认脱敏、三快照保留、有界 MCP 输入/输出、有界 handoff、Hook fail-open 和 continuity corruption fail-closed；成功与错误 MCP 结果都受 24 KiB 线预算约束。
-- 宿主 session/turn 标识落盘前转为不可逆哈希；任务、archive、snapshot、lock 与删除路径拒绝符号链接和 Windows junction 越界。
-- 公共 MCP 不暴露外部 intent 绑定、provider token 或 verified-evidence 写入；相关内部适配协议只有测试边界，不能由模型调用。
-- 一份与 Execution Fidelity Guard v0.1.0 对齐的七字段只读 `execution_guard_view`；Guard 当前不消费它，双方没有 live bridge。
-- 30 例协议评估资产、87 项自动化测试和仓库自检。
-- 一次独立安装态用户流程已覆盖普通静默、Protect、精确确认落盘、Show 和 Off；最终候选全部首次成功，但显式保护回合仍观察到重复 Skill resource 读取和 30 至 60 秒级等待。
-- 真实 Codex 手动/连续自动压缩、安装缓存、宿主发现与安装包 E2E 是 v0.1.0 发布门槛；最终收据按源码树和插件包 SHA-256 绑定，避免拿旧缓存或旧结果验收新代码。
+### 共享核心
+
+- 追加式任务 ledger、哈希链、严格 schema、原子写入、generation 控制、来源、覆盖、
+  冲突、验证状态和当前有效投影。
+- 有界压缩快照、恢复等价检查、旧 `next_action` 强制失效、resume、clear、
+  handoff 和子 Agent 候选。
+- 用户权威状态的完整可读提案、一次性第二确认和来源事件单次消费。
+- 8 MiB ledger、三个 512 KiB 快照、128 个有效项、256 KiB handoff 与模型上下文
+  预算等硬上限。
+- 凭据脱敏、宿主 ID 哈希、路径 realpath containment、symlink/junction 防护、两阶段
+  reset/delete 和删除后字节扫描。
+- 一个只读、七字段 Continuity-to-Guard projection；没有写回。
+
+### Codex
+
+- 插件 manifest、Git marketplace、默认 Hooks、Skill、本地 stdio MCP 与八个有界工具。
+- `PreCompact`、`PostCompact`、compact/resume/clear `SessionStart`、
+  `UserPromptSubmit`、Subagent 与 SessionEnd 闭环。
+- 真实手动压缩、连续自动压缩、字节一致安装缓存、宿主只读发现和安装包 E2E 收据。
+- 88 个核心测试、Hook/MCP smoke、30 案例协议 fixture 和仓库验证器。
+
+### DeepSeek Harness
+
+- 与核心共用状态和恢复规则的 Cordis 插件适配器及 `dsh.bundle.patch`。
+- native tools，并由宿主绑定 task、cwd 与可信 user source，相关字段不暴露给模型。
+- `agent/inbox/inserted`、compaction start/end、resume、父子 Agent 候选和
+  awaited `agent/pre-step` 恢复；summary 内容明确忽略且不写入状态。
+- 发布版 `0.1.1-rc.2` Cordis、AgentRegistry、Session、SystemPrompt 与
+  ToolRuntime 集成测试。
+- 7 个适配/集成测试、隔离 tarball 安装收据和发布版 Host API 生命周期收据。
+
+### macOS
+
+- 同一份代码和包，没有 Mac fork。
+- 已配置 GitHub Actions `macos-latest` Node 20/22 完整核心、DSH、仓库、Hook、
+  MCP、协议评估与依赖审计矩阵；公开绿灯是发布门槛。
+- 跨平台 data-root 和路径测试，安装/卸载与证据边界文档。
 
 ## 刻意未实现
 
-完整 transcript 备份、向量检索、云同步、长期记忆提升、任务规划、工具权限、执行拦截、自动发布、后台清理、UI dashboard 和其他 Agent 适配器。
+- 完整对话归档、长期记忆、向量检索、任务管理器、规划器或第二套 Harness。
+- 每轮模型摘要、后台常驻进程、远端账户同步、跨任务画像。
+- 由模型提供 provider token、verified-evidence token、task/cwd/source identity。
+- 直接修改宿主摘要、阻止宿主压缩、接管权限审批或执行工具。
+- 自动删除 30 天前状态。
+- 实时三插件 bridge 或 Guard 写回。
 
-## 协议存在但未对外启用
+## 协议存在但未实时启用
 
-- Intent Loop provider 绑定：核心有版本/hash/碰撞测试，但没有模型不可见的安全适配身份，因此公共 MCP 无此工具。
-- Verified evidence provider：核心可接受隔离服务凭据，但公共 MCP 不能接收或转发模型提供的 token。
-- Continuity-to-Guard snapshot：shape 已冻结并测试，Guard 0.1.0 不加载。
+- Intent provider：核心测试覆盖版本回退、同版本碰撞和 hash 不一致；公共表面无安全
+  provider 身份隔离，所以不开放绑定。
+- Continuity-to-Guard：shape 已冻结并测试；Execution Fidelity Guard v0.2 当前没有
+  live Continuity bridge，也没有 DSH adapter。
+- 同时安装 Intent Loop、Context Continuity 和 Guard 不会自动形成三套或一套共享真相。
 
 ## 尚需真实验证
 
-- 30 任务真实三臂效果与预注册门槛。
-- 真实跨进程 `thread/resume` 和真实父子 Agent 往返交接。
-- 独立用户长期 dogfood、升级兼容、macOS/Linux 与不同 Codex 版本矩阵。
-- Claude Code、Cursor、Gemini CLI 和 WorkBuddy/CodeBuddy 适配器。
+- 冻结的 30 任务三臂产品效果评估。
+- 真实 Mac Codex 宿主上的手动与自动压缩生命周期。
+- 完整 DSH CLI profile add/remove 与 DSH 引擎生成的自动压缩。
+- 长期独立用户 dogfood、升级矩阵和更多 Codex/DSH 版本。
+- Intent Loop 暴露满足单调 revision、规范 hash 与受信身份边界的 producer 后的真实
+  三产品组合测试。
 
-生命周期收据、安装包 E2E、宿主只读调用和协议 fixture 都是实现证据，不是“减少返工或目标漂移”的效果结论。
+生命周期、安装包和 Host API 收据是机制证据，不等于已经证明减少返工、目标漂移或
+恢复时间。

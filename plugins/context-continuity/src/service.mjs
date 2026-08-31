@@ -43,10 +43,21 @@ import {
   workspaceFingerprint
 } from "./util.mjs";
 
-export function taskRefForSession(sessionId) {
+function normalizedHostName(hostName) {
+  assertCondition(typeof hostName === "string"
+    && /^[a-z][a-z0-9_-]{1,31}$/u.test(hostName),
+  "INVALID_HOST_NAME", "host_name must be a lowercase namespace.");
+  return hostName;
+}
+
+export function taskRefForHostSession(hostName, sessionId) {
   assertCondition(typeof sessionId === "string" && sessionId.length > 0,
     "SESSION_ID_REQUIRED", "session_id is required.");
-  return "codex:" + sha256(sessionId).slice(0, 32);
+  return normalizedHostName(hostName) + ":" + sha256(sessionId).slice(0, 32);
+}
+
+export function taskRefForSession(sessionId) {
+  return taskRefForHostSession("codex", sessionId);
 }
 
 function sameWorkspace(left, right) {
@@ -375,6 +386,7 @@ function capsuleContext(capsule, requestedBudget = DEFAULT_TOKEN_BUDGET) {
 export class ContinuityService {
   constructor(options) {
     this.dataRootInfo = options.dataRootInfo;
+    this.hostName = normalizedHostName(options.hostName || "codex");
     this.clock = options.clock || Date;
     this.tokenBudget = options.tokenBudget || DEFAULT_TOKEN_BUDGET;
     this.trustedProviderToken = options.trustedProviderToken || null;
@@ -384,10 +396,15 @@ export class ContinuityService {
     });
   }
 
+  hostSource(eventName, suffix = null) {
+    return this.hostName + ":" + eventName
+      + (suffix ? ":" + suffix : "");
+  }
+
   async observeWorkspace(transaction, workspace) {
     if (!sameWorkspace(transaction.projection.latest_workspace, workspace)) {
       transaction.append("workspace_observed", { workspace }, {
-        sourceRef: "codex:workspace"
+        sourceRef: this.hostSource("workspace")
       });
     }
   }
@@ -409,7 +426,7 @@ export class ContinuityService {
   }
 
   async observePrompt(payload) {
-    const taskRef = taskRefForSession(payload.session_id);
+    const taskRef = taskRefForHostSession(this.hostName, payload.session_id);
     const safeTurnId = opaqueHostIdentifier("turn", payload.turn_id);
     return this.store.transact(taskRef, async (transaction) => {
       const signal = promptSignalPayload(payload.prompt, transaction.projection);
@@ -427,7 +444,7 @@ export class ContinuityService {
         await this.observeWorkspace(transaction, workspace);
       }
       const event = transaction.append("prompt_signal_observed", signal, {
-        sourceRef: "codex:user_prompt:" + (safeTurnId || "unknown")
+        sourceRef: this.hostSource("user_prompt", safeTurnId || "unknown")
       });
       return {
         schema_version: SCHEMA_VERSION,
@@ -841,7 +858,7 @@ export class ContinuityService {
         created_at: snapshot.created_at,
         file_name: fileName
       }, {
-        sourceRef: "codex:PreCompact:" + args.trigger
+        sourceRef: this.hostSource("PreCompact", args.trigger)
       });
       await transaction.writeSnapshot(snapshot);
       return {
@@ -877,7 +894,7 @@ export class ContinuityService {
         snapshot_matched: matched,
         completed_at: nowIso(this.clock)
       }, {
-        sourceRef: "codex:PostCompact:" + args.trigger
+        sourceRef: this.hostSource("PostCompact", args.trigger)
       });
       return {
         schema_version: SCHEMA_VERSION,
@@ -983,7 +1000,7 @@ export class ContinuityService {
         findings: report.findings,
         checked_at: report.checked_at
         }, {
-          sourceRef: "codex:SessionStart:" + args.source
+          sourceRef: this.hostSource("SessionStart", args.source)
         });
       }
       return {
@@ -1013,9 +1030,9 @@ export class ContinuityService {
         return disabledResult(args.task_ref, "clear_task");
       }
       const event = transaction.append("task_cleared", {
-        source: args.source || "codex:clear"
+        source: args.source || this.hostSource("clear")
       }, {
-        sourceRef: args.source || "codex:clear"
+        sourceRef: args.source || this.hostSource("clear")
       });
       return {
         schema_version: SCHEMA_VERSION,
@@ -1114,7 +1131,7 @@ export class ContinuityService {
         excerpt_truncated: redacted.truncated,
         candidate_only: true
       }, {
-        sourceRef: "codex:SubagentStop:" + (safeAgentId || "unknown")
+        sourceRef: this.hostSource("SubagentStop", safeAgentId || "unknown")
       });
       return {
         schema_version: SCHEMA_VERSION,
@@ -1302,7 +1319,7 @@ export class ContinuityService {
         reason: args.reason || "other",
         ended_at: nowIso(this.clock)
       }, {
-        sourceRef: "codex:SessionEnd"
+        sourceRef: this.hostSource("SessionEnd")
       });
       return {
         event_id: event.event_id
@@ -1315,6 +1332,7 @@ export function createServiceFromEnvironment(environment = process.env, options 
   const dataRootInfo = resolveDataRoot(environment);
   return new ContinuityService({
     dataRootInfo,
+    hostName: options.hostName,
     clock: options.clock,
     tokenBudget: options.tokenBudget,
     trustedProviderToken: options.trustedProviderToken

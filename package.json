@@ -1,8 +1,8 @@
 {
   "name": "context-continuity",
-  "version": "0.1.0+codex.20260829002925",
+  "version": "0.2.0-beta.1+codex.20260831042041",
   "private": true,
-  "description": "Local-first Codex plugin that preserves source-aware task invariants across lossy context transitions.",
+  "description": "Local-first continuity plugin for Codex and DeepSeek Harness that preserves source-aware task invariants across lossy context transitions.",
   "license": "Apache-2.0",
   "author": "Song Luo",
   "repository": {
@@ -18,7 +18,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test --test-concurrency=1",
+    "test": "node --test --test-concurrency=1 test",
     "validate": "node scripts/validate-repo.mjs",
     "smoke:hooks": "node scripts/smoke-hooks.mjs",
     "smoke:mcp": "node scripts/smoke-mcp.mjs",
@@ -28,6 +28,38 @@
     "verify:lifecycle:manual": "node scripts/verify-real-lifecycle.mjs --mode manual --output validation/real-manual.json",
     "verify:lifecycle:auto": "node scripts/verify-real-lifecycle.mjs --mode auto --output validation/real-auto.json",
     "verify:installed": "node scripts/verify-installed-package.mjs --output validation/installed-package.json",
-    "verify:installed-host": "node scripts/verify-installed-host-read.mjs --output validation/installed-host-read.json"
+    "verify:installed-host": "node scripts/verify-installed-host-read.mjs --output validation/installed-host-read.json",
+    "test:dsh": "node --test --test-concurrency=1 adapters/deepseek-harness/test",
+    "verify:dsh:package": "node scripts/verify-dsh-package.mjs --output validation/dsh-package.json",
+    "verify:dsh:lifecycle": "node scripts/verify-dsh-lifecycle.mjs --output validation/dsh-real-lifecycle.json"
+  },
+  "main": "./adapters/deepseek-harness/index.js",
+  "exports": {
+    ".": "./adapters/deepseek-harness/index.js",
+    "./deepseek-harness": "./adapters/deepseek-harness/index.js"
+  },
+  "files": [
+    "adapters/deepseek-harness/",
+    "plugins/context-continuity/",
+    "LICENSE",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./adapters/deepseek-harness/cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-tools": "0.1.1-rc.2"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.2",
+    "@deepseek-ai/dsh-agent": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-llm": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-session": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-system-prompt": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-tools": "0.1.1-rc.2"
   }
 }

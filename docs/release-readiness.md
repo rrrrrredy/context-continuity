@@ -1,115 +1,114 @@
-# Release readiness: v0.1.0
+# Release readiness: v0.2.0-beta.1
 
-Decision date: 2026-08-28
-Decision: **GO for public self-hosted beta; ITERATE for efficacy; NOT READY for GA or universal-directory submission**
+Decision date: 2026-08-31
+Decision: **GO for a pinned public prerelease after all tagged CI matrix jobs
+pass; NO RESULT for efficacy; NOT GA**
 
 ## What this decision means
 
-The repository is suitable for an opt-in GitHub beta with a bounded promise:
+The repository is suitable for an opt-in GitHub prerelease with a bounded
+promise:
 
-- it installs as a Codex plugin;
-- it keeps local, source-aware, task-scoped state;
-- it observes real compaction lifecycle events;
-- it can recover the same verified invariants after compaction while forcing the
-  old action cursor to be rederived;
-- it fails open for Codex and exposes explicit deletion controls.
+- Codex installs a local plugin with source-aware, task-scoped state;
+- DeepSeek Harness installs a thin adapter against the pinned
+  `0.1.1-rc.2` developer-preview contract;
+- both hosts share the same ledger and recovery rules;
+- real Codex compaction events and published DSH Host APIs are exercised;
+- macOS, Windows, and Linux run the same code/package matrix;
+- failures leave the host usable and expose explicit task-scoped deletion.
 
-It does **not** mean the plugin has already proved that it reduces user rework,
-target drift, or recovery time. The frozen real-task three-arm study has not
-been run, so product efficacy remains **NO RESULT**.
+It does not mean the plugin has proved reduced user rework, target drift, or
+recovery time. The frozen real-task three-arm study has not run, so product
+efficacy remains **NO RESULT**.
 
 ## Executed evidence
 
 | Surface | Evidence | Result |
 | --- | --- | --- |
-| Automated behavior | Node test suite | 87 passed, 0 failed, 0 skipped on the hardened release candidate; final tagged CI remains required |
-| Source lifecycle | validation/real-manual.json and validation/real-auto.json | One real manual and at least two consecutive real automatic compactions; each pairs PreCompact, PostCompact, SessionStart(compact), and App Server contextCompaction started/completed; next_action becomes stale by design |
-| Installed lifecycle | validation/real-installed-manual.json and validation/real-installed-auto.json | Same real lifecycle using a byte-identical installed cache package |
-| Real host discovery | validation/installed-host-read.json | Fresh ephemeral Codex process discovered context_continuity and performed exactly one physical state read; the complete plugin-data tree and Codex configuration were byte-identical before/after, with no command, file, network, or unrelated MCP action |
-| Installed package E2E | validation/installed-package.json | Hardened installed cache passed Hook observation, three-item write, cross-process recovery, exact Skill/license checks, redaction, two-stage deletion, and post-delete byte scan |
-| Independent user flow | docs/user-pilot-2026-08-29.md | Six real installed-candidate Codex turns: ordinary work stayed silent; protect, exact record, show, and off succeeded without business errors after the final schema and token guidance fixes |
-| Authority and data claims | Automated and installed checks | Complete readable state proposals require a second exact user prompt; management challenges are visible in text and safely reissuable; quoted/negated/paraphrased prompts cannot mint authority; raw prompt/assistant content is omitted from receipts; host IDs are hashed; no persistent Hook-trust change |
-| Artifact identity | All validation receipts | Source-tree, source-plugin, and tested-plugin SHA-256 digests must match the release candidate |
-| Protocol evaluation | 30 frozen cases | Evaluation pipeline is executable; fixture results are not efficacy evidence |
-| Ordinary-turn source Hook cost | scripts/benchmark-hook.mjs | Final Windows/Node 20 run, 30 cold starts: p50 121.32 ms, p95 148.34 ms; no extra model call |
-
-The final tag additionally requires repository validation, Hook and MCP smoke
-tests, dependency audit, the official plugin validator, and public GitHub CI.
-Their final result is recorded in the tagged release and must not be inferred
-from this pre-tag document.
+| Core behavior | Node test suite | 87 passed on the local release candidate; tagged CI is authoritative across OS/Node matrix |
+| Codex source lifecycle | `validation/real-manual.json`, `validation/real-auto.json` | Real manual and at least two consecutive automatic compactions with Pre/PostCompact, compact SessionStart, App Server start/completion, and stale next action |
+| Codex installed lifecycle | `validation/real-installed-manual.json`, `validation/real-installed-auto.json` | Same real lifecycle using a byte-identical installed cache package |
+| Codex host discovery | `validation/installed-host-read.json` | Fresh ephemeral read-only process discovered the MCP and made exactly one physical state read without changing plugin data or Codex configuration |
+| Codex installed package | `validation/installed-package.json` | Installed cache passed Hook observation, state write, cross-process recovery, redaction, two-stage deletion, and byte scan |
+| DSH adapter | 7 adapter/integration tests | Published Cordis, AgentRegistry, Session, SystemPrompt, and ToolRuntime APIs exercised |
+| DSH package | `validation/dsh-package.json` | Packed tarball installed in an isolated consumer, bundle/peers/files/import verified, scratch removed |
+| DSH lifecycle | `validation/dsh-real-lifecycle.json` | Native confirmation, schema-validated compaction events, real pre-step waterfall, stale action and host-bound user source verified |
+| Independent user flow | `docs/user-pilot-2026-08-29.md` | Six installed-candidate Codex turns covered silence, protect, exact write, show and off |
+| Multi-OS | GitHub Actions | Ubuntu, Windows and `macos-latest`, Node 20/22; public tagged run is the release gate |
+| Protocol evaluation | 30 frozen cases | Executable fixture for protocol regressions; explicitly not efficacy evidence |
+| Artifact identity | All receipts | Source-tree and source-plugin SHA-256 must match the release candidate |
 
 ## Release gates
 
 | Gate | Status | Reason |
 | --- | --- | --- |
-| Scope | Pass | Plugin remains continuity-only, not memory platform, planner, permission system, or Harness |
-| Codex feasibility | Pass | Real installed Pre/PostCompact and compact SessionStart loop observed |
-| State integrity | Pass | Strict event/root schema, hash chain, pre-read size cap, atomic writes, generation control, provenance, supersession, conflict, and corruption behavior are exercised |
-| Privacy/delete | Pass for synthetic beta | Minimal local state, caps, expanded redaction, one-time destructive confirmation, hashed host IDs, bounded success/error responses, symlink/junction containment, installed-cache deletion, and byte scans are exercised |
-| Installability | Pass | Standard Git marketplace package and installed cache runtime work on the tested Codex build |
-| Open-source operations | Pass pending final public CI | Apache-2.0, contribution/security/support files, issue templates, CI, changelog, and release notes exist |
-| Product efficacy | No result | Real three-arm study has not run |
-| Broad compatibility | Not passed | Only codex-cli 0.150.0-alpha.8 on Windows has real-host evidence |
+| Scope | Pass | Continuity-only; no memory platform, planner, permission system, database, daemon, or second Harness |
+| Codex feasibility | Pass on tested Windows host | Real installed manual and automatic compaction loop |
+| DSH feasibility | Pass for pinned published Host APIs | Native tools and lifecycle integration against `0.1.1-rc.2` |
+| State integrity | Pass | Schema, hash chain, caps, atomic writes, generation, provenance, supersession, conflict, and corruption behavior exercised |
+| Authority boundary | Pass | Exact second confirmation; host-bound identifiers; no model-visible provider/evidence credentials |
+| Privacy/delete | Pass for prerelease | Minimal local state, redaction, caps, containment, task confirmation, uninstall separation |
+| macOS code/package | Tagged CI required | Real `macos-latest` execution, not an authenticated Codex desktop lifecycle |
+| Installability | Pass for packaged surfaces | Codex Git marketplace and isolated DSH distributable verification |
+| Product efficacy | No result | Frozen real-task three-arm study remains unexecuted |
+| Cross-product live bridge | Not shipped | Read-only contracts aligned; no live shared-state integration |
 
 ## Known limits
 
-- No completed real cross-process thread/resume lifecycle receipt.
-- No completed real parent-to-subagent-to-parent handoff receipt.
-- A short independent installed-candidate flow passed, but there is no
-  independent long-running user dogfood before this beta.
-- No upgrade matrix across Codex versions, macOS, or Linux hosts.
-- User-authoritative semantic updates require a second exact, readable
-  confirmation. This is intentionally limited to explicit protection requests
-  or material risk, but independent dogfood must still measure the interruption
-  cost.
-- One 30-run source UserPromptSubmit process measurement was 121.32 ms p50 and
-  148.34 ms p95 on the release Windows/Node 20 host. Installed-client, macOS,
-  and Linux latency have not been measured.
-- In the short pilot, explicit protect and confirmation turns each read the MCP
-  Skill resource twice and accumulated high whole-turn input usage, mostly
-  cached; user-visible latency was roughly 30 to 60 seconds. This is a beta
-  usability issue, not evidence of ordinary-turn overhead.
-- No Claude Code, Cursor, Gemini CLI, or WorkBuddy adapter is shipped.
-- Installing Intent Loop and Context Continuity together does not yet create
-  automatic shared truth: Intent Loop v1 does not expose an immutable monotonic
-  snapshot revision and canonical snapshot hash required by the binding
-  contract. Manual or inferred version synthesis is prohibited.
-- The Continuity-to-Execution-Guard seven-field read-only schema is aligned,
-  and was rechecked against the released Guard v0.1.0 contract; neither
-  repository ships a live bridge in 0.1.0.
-- The public MCP does not expose external intent binding or verified-evidence
-  provider credentials. Internal adapter contracts are not a market feature.
+- Real Codex lifecycle receipts were produced on the tested Windows host, not on
+  an authenticated Mac Codex host.
+- `macos-latest` proves code, process, packaging, Hook, MCP, eval, and DSH
+  adapter behavior; it does not prove real Codex desktop automatic compaction.
+- The DSH CLI profile-add path and engine-generated automatic compaction were not
+  exercised in the local release environment.
+- DSH is a developer preview and compatibility is pinned to
+  `0.1.1-rc.2`.
+- No upgrade matrix across several Codex or DSH versions.
+- No long-term independent-user dogfood or completed three-arm efficacy study.
+- Ordinary source Hook startup was last measured on Windows/Node 20; installed
+  client and Mac end-to-end latency require separate measurement.
+- Intent Loop and Execution Fidelity Guard contracts are aligned, but no live
+  bridge ships. Guard v0.2 has a file provider only and no DSH adapter.
 
 ## Allowed market claims
 
-- Local-first Codex public beta.
-- Real manual and automatic compaction lifecycle observed on the stated build.
-- Minimal source-aware state, no transcript backup, no network or telemetry.
-- Installed package persistence, exact authority confirmation, redaction,
-  bounded responses, two-stage management actions, and fail-open behavior are
-  tested.
+- Local-first public prerelease for Codex and a pinned DeepSeek Harness developer
+  preview.
+- Same cross-platform core and state format on Windows, macOS, and Linux.
+- Real Codex lifecycle verified on the tested Windows host.
+- Core/package/Hook/MCP/eval/DSH adapter run on a real GitHub macOS runner after
+  tagged CI passes.
+- Published DSH Host API lifecycle and isolated distributable verified.
+- Full transcript is not copied; state is task-scoped, source-aware, bounded, and
+  explicitly deletable.
+- Mechanical receipts are source-bound.
 
 ## Prohibited market claims
 
-- “Prevents context loss” without qualification.
-- “Proven to reduce rework, target drift, or recovery time.”
-- “Works on all Codex versions or all Agent products.”
-- “Provides a complete memory system.”
-- “Automatically integrates with Intent Loop” until the missing version/hash
-  contract exists and is tested.
+- “Proven to eliminate context loss, drift, or rework.”
+- “Real Codex automatic compaction verified on Mac” until an authenticated host
+  receipt exists.
+- “Full DSH CLI and automatic compaction verified” until those exact paths run.
+- “Works on every Codex/DSH version or every Agent product.”
+- “Automatically integrates with Intent Loop or Execution Fidelity Guard.”
+- “Secure secret vault” or “complete transcript recovery.”
 
-## Exit criteria after beta
+## Exit criteria after prerelease
 
-Run the frozen 30-task three-arm evaluation without changing thresholds after
-seeing results. A stable release requires the PRD thresholds for invariant
-retention, next-action equivalence, drift reduction, erroneous restoration,
-token cost, interruption rate, rework, recovery time, and user acceptance. It
-also requires independent dogfood plus real resume and subagent handoff.
+1. Run the frozen 30-task three-arm study without changing thresholds after
+   results are visible.
+2. Obtain an authenticated Mac Codex manual and automatic lifecycle receipt.
+3. Exercise DSH CLI profile add/remove and engine-generated automatic
+   compaction.
+4. Complete an upgrade matrix across at least two relevant host releases.
+5. Measure installed-client latency and user interruption rate.
+6. Close critical findings from independent adversarial and user-perspective
+   release reviews.
 
 ## Local cleanup requirement
 
-Release verification may temporarily install the plugin and its marketplace.
-Before final delivery, remove exactly context-continuity@context-continuity,
-the context-continuity marketplace, its installed cache, and its empty or
-synthetic plugin-data directory. Do not modify unrelated plugins, marketplaces,
-Hook trust entries, or user projects.
+Release verification may temporarily use isolated host homes and installation
+caches. Before delivery, remove those exact temporary installs and confirm the
+normal local Codex plugin list and DSH executable/profile state do not contain
+Context Continuity. Project source dependencies are development files, not a
+host plugin installation.

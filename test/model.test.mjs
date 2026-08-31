@@ -28,7 +28,7 @@ test("prompt observation stores a hash and redacted bounded signal, not the comp
   assert.match(event.payload.excerpt, /\[REDACTED(?::[^\]]+)?\]/);
 });
 
-test("first-prompt initialization stores only the bounded redacted excerpt needed for provenance", async (t) => {
+test("ordinary first-prompt provenance stores no prompt excerpt", async (t) => {
   const harness = await createHarness(t, "first-prompt-minimal");
   const prompt = "Please review the current module.";
   const observed = await observePrompt(
@@ -41,7 +41,30 @@ test("first-prompt initialization stores only the bounded redacted excerpt neede
   const ledger = (await harness.service.store.readLedger(observed.task_ref)).ledger;
   const event = ledger.events.find((entry) => entry.event_id === observed.source_event_id);
   assert.equal(event.payload.prompt_sha256, sha256(prompt));
-  assert.equal(event.payload.excerpt, prompt);
+  assert.equal(event.payload.prompt_length, prompt.length);
+  assert.equal(event.payload.excerpt, null);
+  assert.equal(event.payload.excerpt_truncated, false);
+  assert.deepEqual(event.payload.secret_redactions, []);
+  assert.equal(JSON.stringify(ledger).includes(prompt), false);
+});
+
+test("ordinary later prompts retain only hash, length, and empty signals", async (t) => {
+  const harness = await createHarness(t, "ordinary-prompt-minimal");
+  await observePrompt(harness.service, harness.cwd, "ordinary-prompt-session", "Initial request.");
+  const prompt = "Continue reviewing the module.";
+  const observed = await observePrompt(harness.service, harness.cwd, "ordinary-prompt-session", prompt);
+  assert.deepEqual(observed.signals, []);
+  const ledger = (await harness.service.store.readLedger(observed.task_ref)).ledger;
+  const event = ledger.events.find((entry) => entry.event_id === observed.source_event_id);
+  assert.deepEqual(event.payload, {
+    prompt_sha256: sha256(prompt),
+    prompt_length: prompt.length,
+    signals: [],
+    excerpt: null,
+    excerpt_truncated: false,
+    secret_redactions: []
+  });
+  assert.equal(JSON.stringify(ledger).includes(prompt), false);
 });
 
 test("user-authoritative state requires an observed prompt source", async (t) => {

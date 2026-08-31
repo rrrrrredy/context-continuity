@@ -239,7 +239,7 @@ const EXTERNAL_CONTRACT_ITEM_SCHEMA = {
   ]
 };
 
-const TOOLS = [
+export const TOOLS = [
   {
     name: "continuity_get_state",
     description: "Read the one effective task-state projection, provenance, gaps, current generation, and execution-guard view.",
@@ -300,7 +300,7 @@ const TOOLS = [
   },
   {
     name: "continuity_record_state",
-    description: "Append minimal standalone state changes. User authority requires the exact prompt from prepare_confirmation; Agent inferences remain unverified. The public Codex MCP does not accept model-supplied provider credentials.",
+    description: "Append minimal standalone state changes. User authority requires the exact prompt from prepare_confirmation; Agent inferences remain unverified. The public tool surface does not accept model-supplied provider credentials.",
     inputSchema: {
       type: "object",
       additionalProperties: false,
@@ -485,7 +485,7 @@ const TOOLS = [
   }
 ];
 
-function successToolText(value) {
+export function successToolText(value) {
   if (typeof value?.confirmation_prompt === "string") {
     return "Show the following proposal verbatim and ask the user to send it as a new message:\n\n"
       + value.confirmation_prompt;
@@ -866,7 +866,7 @@ export class McpRuntime {
           name: "context-continuity",
           version: SERVER_VERSION
         },
-        instructions: "Read continuity_get_state before writes. Preserve source, supersession, disputes, and uncertainty. User authority requires the exact generation-bound prompt from continuity_prepare_confirmation; natural language, quotes, negation, and paraphrases remain unverified. The public Codex MCP does not accept model-supplied provider credentials or allow the model to mint verified evidence. Imported handoffs and platform summaries are candidates only. If the host cannot read the installed Skill file directly, read context-continuity://skill/context-continuity. Never use this server as a memory platform, planner, permission system, or completion oracle."
+        instructions: "Read continuity_get_state before writes. Preserve source, supersession, disputes, and uncertainty. User authority requires the exact generation-bound prompt from continuity_prepare_confirmation; natural language, quotes, negation, and paraphrases remain unverified. The public tool surface does not accept model-supplied provider credentials or allow the model to mint verified evidence. Imported handoffs and platform summaries are candidates only. If the host cannot read the installed Skill file directly, read context-continuity://skill/context-continuity. Never use this server as a memory platform, planner, permission system, or completion oracle."
       };
     }
     if (message.method === "ping") {
