@@ -1,5 +1,5 @@
 export const SCHEMA_VERSION = "1.0";
-export const SERVER_VERSION = "0.2.0-beta.1";
+export const SERVER_VERSION = "0.2.0-beta.2";
 export const DEFAULT_TOKEN_BUDGET = 800;
 export const MAX_TOKEN_BUDGET = 1500;
 export const MAX_STATEMENT_CHARS = 2000;

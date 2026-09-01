@@ -3,20 +3,29 @@
   "run_kind": "real_codex_lifecycle",
   "mode": "manual",
   "verified": true,
-  "started_at": "2026-08-31T07:11:59.143Z",
-  "completed_at": "2026-08-31T07:12:29.075Z",
-  "codex_version": "codex-cli 0.150.0-alpha.8",
+  "started_at": "2026-09-01T03:17:21.468Z",
+  "completed_at": "2026-09-01T03:17:47.396Z",
+  "codex_version": "codex-cli 0.151.0-alpha.7.2",
+  "codex_version_token": "0.151.0-alpha.7.2",
+  "codex_executable_sha256": "bfd4c3b971477a559eadaeae8b1e41382ccb7656bd0104970cf5c6c581f2da7d",
+  "codex_executable_path_sha256": "89fb9d6cff511661b087589cbefb5d8fd291d856934154fade4680bd816d37eb",
+  "app_server_executable_path_matched": true,
+  "app_server_user_agent_sha256": "abcecb66f962214bc5c0720eff098679bc866ec072abe32cb484d753fc7fbb49",
+  "app_server_version_token": "0.151.0-alpha.7.2",
+  "app_server_platform_family": "windows",
+  "app_server_platform_os": "windows",
+  "version_identity_matched": true,
   "plugin_runtime": "source_checkout",
   "app_server_method": "thread/compact/start",
   "model": "gpt-5.4-mini",
-  "source_tree_sha256": "c8c3fa77b234c703d3f83751d6a7153d95441cf10ede11affc7f79647795c721",
-  "source_plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
-  "plugin_package_sha256": "b8429882b08ff03ab8495f3f6795d620294020d9344d3e2140a4f002c6dc588d",
-  "source_tree_file_count": 91,
+  "source_tree_sha256": "91263e95a6347ce1cf2329818cf6161cbbec0423299dd547e913f2c6106bc684",
+  "source_plugin_package_sha256": "5e607cd5b4a2249a4b757e2016039d85a40536aa6aaa4d266a6cda61d8209f75",
+  "plugin_package_sha256": "5e607cd5b4a2249a4b757e2016039d85a40536aa6aaa4d266a6cda61d8209f75",
+  "source_tree_file_count": 93,
   "plugin_package_file_count": 18,
-  "scratch_hook_config_sha256": "546aaec1e08b1e35ddc0e6fc6fd88891b0eae61b66fad2c06a4a2e16442e90d3",
-  "input_sha256": "9d673e544c9938f507b5ccfa3561cfc7c88a3f4bfe261714a87795a33006ce6b",
-  "confirmation_prompt_sha256": "17d6cccb330c4947026fc9f9f616ed462b3afeef4116f46ca406b890b7167e38",
+  "scratch_hook_config_sha256": "1da76f40d66790016c9cbf7989eaeb188faddd137383edeec19ebbcab76af97f",
+  "input_sha256": "0fa1c5f831f980bdca712077b19aa739fc1bffdd812785240263fb0ee607462d",
+  "confirmation_prompt_sha256": "b665007af59623d6f8b57615561ed76decd05a6202b4f8683dcee2939a20e160",
   "readable_state_confirmation_used": true,
   "preexisting_hook_listing": [],
   "session_hook_events_injected": [
@@ -34,65 +43,65 @@
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 1237
+      "duration_ms": 747
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1280
+      "duration_ms": 918
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1071
+      "duration_ms": 1017
     },
     {
       "event_name": "preCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1791
+      "duration_ms": 816
     },
     {
       "event_name": "postCompact",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1177
+      "duration_ms": 664
     },
     {
       "event_name": "sessionStart",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "thread",
-      "duration_ms": 1760
+      "duration_ms": 855
     },
     {
       "event_name": "userPromptSubmit",
       "status": "completed",
       "source": "sessionFlags",
       "scope": "turn",
-      "duration_ms": 1955
+      "duration_ms": 777
     }
   ],
   "unrelated_hook_ran": false,
   "context_compaction_items": [
     {
       "notification": "item/started",
-      "thread_id_sha256": "8fcffe022489d221ab23bbf25edbdcd7786dd8abb561808d4cf32c16c222b4b5",
-      "turn_id_sha256": "0c6373b56121f8d60a7a7e0da8a98c62029ceae745b2e8a65b0dcf163c0bb6b4",
-      "item_id_sha256": "81c57d524a2dc359b3daf703d7c0673ba9f80a1761eac5cebff47983d84b9b35",
+      "thread_id_sha256": "c2911d35a04ef079f4506d598a755b336a0f20b35681a9f32ff9311a2e2f4747",
+      "turn_id_sha256": "5de92f0325d34e9582f7aeb4e73d1fc4072115be2743c3b0a8171fbd2037d58e",
+      "item_id_sha256": "c751612a4521d68139492a82377ce29652e3f4c77f4deee9038c09221b4d11e9",
       "item_type": "contextCompaction"
     },
     {
       "notification": "item/completed",
-      "thread_id_sha256": "8fcffe022489d221ab23bbf25edbdcd7786dd8abb561808d4cf32c16c222b4b5",
-      "turn_id_sha256": "0c6373b56121f8d60a7a7e0da8a98c62029ceae745b2e8a65b0dcf163c0bb6b4",
-      "item_id_sha256": "81c57d524a2dc359b3daf703d7c0673ba9f80a1761eac5cebff47983d84b9b35",
+      "thread_id_sha256": "c2911d35a04ef079f4506d598a755b336a0f20b35681a9f32ff9311a2e2f4747",
+      "turn_id_sha256": "5de92f0325d34e9582f7aeb4e73d1fc4072115be2743c3b0a8171fbd2037d58e",
+      "item_id_sha256": "c751612a4521d68139492a82377ce29652e3f4c77f4deee9038c09221b4d11e9",
       "item_type": "contextCompaction"
     }
   ],
@@ -119,7 +128,7 @@
       "classification": "continue_with_markers"
     }
   ],
-  "final_projection_digest": "029abe15f15f7de70dc3ef729df4d109bd4170518dc723d044395a05e63afaa0",
+  "final_projection_digest": "1482bff8693be765f7230235c3df66149d1176c7cec13379716ffb3af485a53b",
   "final_generation": 1,
   "final_restore_classification": "continue_with_markers",
   "final_recovery_safe_to_continue": true,

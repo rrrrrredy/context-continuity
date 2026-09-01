@@ -13,4 +13,9 @@ The JSON receipts in this directory are privacy-minimized implementation evidenc
 
 The driver injects the vetted repository Hook definitions through thread/start.config.hooks, disables installed plugins for that ephemeral thread, and sets bypass_hook_trust only in the same thread configuration. It aborts before starting if an unrelated non-plugin unmanaged Hook is active, and fails verification if an unrelated Hook nevertheless runs. It does not install the plugin, trust a project, disable another plugin persistently, or change global Codex configuration.
 
-Every successful receipt binds the release source tree, source plugin package, and tested plugin package SHA-256. Receipts exclude prompts, assistant messages, credentials, and raw transcript content. They prove the stated implementation path, not real-task efficacy.
+All eight successful receipts bind the release source tree and source Codex
+plugin package. The six Codex receipts additionally bind the tested plugin
+package; the DSH package receipt binds its isolated tarball, while the DSH Host
+API receipt proves the source integration path rather than that tarball.
+Receipts exclude prompts, assistant messages, credentials, and raw transcript
+content. They prove the stated implementation path, not real-task efficacy.

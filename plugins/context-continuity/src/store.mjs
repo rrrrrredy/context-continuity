@@ -93,7 +93,7 @@ export class LedgerStore {
     const started = Date.now();
     while (Date.now() - started < this.lockTimeoutMs) {
       try {
-        await assertPathInsideReal(this.dataRoot, filePath);
+        await assertPathInsideReal(this.dataRoot, path.dirname(filePath));
         const ownerToken = crypto.randomUUID();
         const handle = await fs.open(filePath, "wx", 0o600);
         await handle.writeFile(JSON.stringify({

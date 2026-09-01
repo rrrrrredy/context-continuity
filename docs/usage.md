@@ -14,7 +14,7 @@
 macOS、Linux 和 Windows 使用同样的命令：
 
 ```sh
-codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.1
+codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.2
 codex plugin add context-continuity@context-continuity
 ```
 
@@ -46,8 +46,14 @@ codex plugin add context-continuity@context-continuity
 - “关闭/开启这个任务的连续性保护。”
 - “重置/删除这个任务的连续性状态。”
 
-关闭、开启、重置和删除都要确认两次。第二次必须把插件显示的完整确认文本原样发回；
-这段文本只能用于当前任务和当前状态，旧确认不能复用。
+| 操作 | 会发生什么 | 不会发生什么 |
+| --- | --- | --- |
+| 关闭 | 停止为该任务新增自动连续性写入；旧状态仍可查看和导出 | 不删除 ledger |
+| 重置 | 清空当前有效投影并开始新 generation，同时保留追加式历史；诊断 CLI 会归档旧任务目录 | 不删除项目文件或原始对话 |
+| 删除 | 删除当前任务的 Continuity 状态及匹配的 Continuity 归档 | 不删除项目文件、原始对话、宿主记忆或其他任务 |
+
+关闭、开启、重置和删除都要确认两次。第二次必须把插件显示的完整确认文本原样发回。
+这段文本只对当前任务、当前 generation 和当前一次操作有效，旧确认不能复用。
 
 ### 自动生命周期
 
@@ -64,10 +70,13 @@ Hook 未启用、未信任或运行失败时，Codex 继续工作，但该边界
 ## DeepSeek Harness 用户流程
 
 要求 DeepSeek Harness `0.1.1-rc.2`、Node.js 20 或更新版本与 `pnpm`。
-把 `<profile>` 换成真实 profile：
+`<profile>` 是 `$DSH_HOME/profiles/<name>` 下一个可运行组合的名字。可使用已有
+profile，也可给预览测试单独取名；官方的首次
+`dsh plugin --profile <name> add ...` 会初始化它。创建和加载规则见
+[官方 profile/plugin 指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)。
 
 ```sh
-dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.1
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.2
 dsh --profile <profile> --dump-config
 ```
 
@@ -115,8 +124,19 @@ Agent 推断必须带来源、置信度和非 verified 状态。任意转述、�
 - 不影响当前动作的低风险不确定性：标记后继续只读或可逆工作。
 - 可能改变目标、范围、授权、工作对象、发布、删除、外发或不可逆动作：暂停相关动作，
   只问一个必要问题。
-- ledger 损坏：不恢复，也不继续写入该损坏状态。
 - 宿主摘要与 ledger 不一致：摘要只作不可信缓存。
+
+| 故障 | 用户看到的状态 | 处置 |
+| --- | --- | --- |
+| Node 或 Hook 启动失败 | Codex 可继续运行，但该边界没有连续性保护 | 确认 Node.js 20+ 在宿主进程 PATH 中，重启 Codex，检查 `/hooks`，再跑 60 秒 smoke test |
+| 恢复内容错误 | 受影响的高风险动作应暂停 | 直接说明正确内容，检查纠正提案，再发送第二次精确确认 |
+| ledger 哈希损坏 | 不恢复，也不继续写入损坏状态 | 先保留损坏数据；`rebuild` 只能核验并重建有效 ledger 的投影，不能修复哈希不一致 |
+| DSH layer 缺失 | DSH 继续运行，但适配器未生效 | 重新加入固定 tag，重启 profile，并用 `dsh --profile <profile> --dump-config` 核验 |
+
+ledger 损坏时，如果精确 task_ref 与实际数据目录都已独立确认，可使用安装包内的诊断
+CLI 做按任务删除；`task_ref` 和 `confirm_task_ref` 必须完全相同。它会删除该任务
+及匹配的 Continuity 归档。任一路径或引用不确定时，保持数据原样并提交 issue，不要
+猜测目录、改写 ledger 或删除整个插件数据根。
 
 ## 公共接口边界
 
@@ -125,8 +145,13 @@ confirmation、record state、correct state、snapshot、export handoff、import
 handoff 和 manage state。
 
 公共接口不接受 intent provider token 或 verified-evidence token，也不能让模型把
-自身判断写成 `verified_evidence`。Intent Loop 与 Execution Fidelity Guard 只有
-冻结的只读边界，`0.2.0-beta.1` 不宣称实时三插件集成。
+自身判断写成 `verified_evidence`。
+
+用最简单的话区分：Context Continuity 负责在有损转换前后保存、搬运和核验任务状态；
+Execution Fidelity Guard 负责根据当前状态判断待执行动作与完成声明。两者只有冻结的
+只读协议边界，没有实时桥接。Continuity 的 DSH 适配器面向 Harness
+`0.1.1-rc.2`，另一个 Guard DSH 适配器面向 `0.1.2-alpha.2`，不要把它们当成
+能在同一 profile 中自动协同的一对组件。
 
 ## 数据位置与卸载
 
@@ -160,17 +185,21 @@ dsh plugin --profile <profile> remove context-continuity
 
 卸载不静默删除 ledger。若需彻底清除，先在仍能运行插件时说“删除这个任务的连续性
 状态”，把第二次精确确认原样发回，再用“显示当前连续性状态”确认该任务已经消失。
-只有插件无法运行时才手工处理目录；先打印并核对解析后的精确路径，不要直接复制一个
-假定路径去删除。
+只有插件无法运行时才手工处理目录。
 
-macOS / Linux 查看默认解析路径：
+下面的命令只打印默认目录候选，不保证是插件运行时实际使用的路径。
+`CONTEXT_CONTINUITY_DATA_DIR`、自定义 `CODEX_HOME` / `DSH_HOME`、Desktop
+进程环境和安装缓存推导都可能改变实际位置。删除前必须从运行时配置或已检查的安装命令
+独立核对实际目录，不能直接拿候选路径执行删除。
+
+macOS / Linux 打印默认目录候选：
 
 ```sh
 printf '%s\n' "${CODEX_HOME:-$HOME/.codex}/plugin-data/context-continuity/v1"
 printf '%s\n' "${DSH_HOME:-$HOME/.dsh}/plugin-data/context-continuity/v1"
 ```
 
-Windows PowerShell：
+Windows PowerShell 打印默认目录候选：
 
 ```powershell
 $ccCodexRoot = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }

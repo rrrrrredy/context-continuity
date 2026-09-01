@@ -34,9 +34,10 @@ pre-compaction extension point.
 
 A first integration attempt exposed `source_event_id` as a native tool
 argument. That would have allowed model-generated or stale identifiers to claim
-user authority. The released adapter instead retains the latest trusted
-`agent/inbox/inserted` observation inside the host process and binds it to
-record, correction, and management calls. The public schemas hide
+user authority. The released adapter instead retains at most eight recent,
+content-free trusted `agent/inbox/inserted` observations inside the host
+process, searches them newest to oldest for an exact confirmation, and binds the
+match to record, correction, and management calls. The public schemas hide
 `task_ref`, `cwd`, and `source_event_id`.
 
 This does not make the model's interpretation automatically correct. A

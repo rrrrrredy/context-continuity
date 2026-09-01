@@ -15,10 +15,16 @@ than assuming later release candidates have the same plugin contract.
 
 ## Install from GitHub
 
-Replace `<profile>` with the DSH profile you actually use:
+`<profile>` is one runnable composition under
+`$DSH_HOME/profiles/<name>`. Use an existing profile or a dedicated preview
+name. Per the
+[official profile/plugin guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md),
+the first `dsh plugin --profile <name> add ...` call initializes that profile.
+This CLI profile-add path remains an explicit release limitation below; do not
+use a production profile for the preview smoke test.
 
 ```sh
-dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.1
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.2
 dsh --profile <profile> --dump-config
 ```
 
@@ -44,6 +50,11 @@ required for the default local data directory.
   waterfall;
 - rechecks resume and parent/child handoff candidates;
 - always makes the old `next_action` stale across a lossy boundary.
+
+Context Continuity does not bundle Execution Fidelity Guard. There is no live
+bridge. This adapter targets Harness `0.1.1-rc.2`; the separate Guard DSH
+adapter targets `0.1.2-alpha.2`. Do not assume they form one integrated
+profile.
 
 The adapter exposes the same eight bounded state tools as the Codex MCP surface.
 Task and session identity, working directory, and user-authority source events
@@ -90,7 +101,11 @@ dsh plugin --profile <profile> remove context-continuity
 Removal does not silently delete task ledgers. For complete deletion, first ask
 the running adapter to delete the current task, send its exact second
 confirmation, and verify that the task state is gone. Only if the adapter cannot
-run, print and inspect the resolved directory first:
+run should manual directory handling be considered.
+
+The command below prints a default candidate, not a guaranteed runtime-resolved
+directory. Verify `CONTEXT_CONTINUITY_DATA_DIR`, `DSH_HOME`, the profile
+process environment, and installed configuration before deleting anything:
 
 ```sh
 printf '%s\n' "${DSH_HOME:-$HOME/.dsh}/plugin-data/context-continuity/v1"

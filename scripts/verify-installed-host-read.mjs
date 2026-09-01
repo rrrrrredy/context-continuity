@@ -10,6 +10,10 @@ import {
   directoryArtifactDigest,
   releaseArtifactDigests
 } from "./artifact-digests.mjs";
+import {
+  codexExecutableEvidence,
+  versionToken
+} from "./codex-executable-evidence.mjs";
 
 const repositoryRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const outputIndex = process.argv.indexOf("--output");
@@ -18,13 +22,15 @@ const outputPath = outputIndex >= 0
   : path.join(repositoryRoot, "validation", "installed-host-read.json");
 const codexCommand = process.env.CONTEXT_CONTINUITY_CODEX_BIN || "codex";
 const model = process.env.CONTEXT_CONTINUITY_HOST_MODEL || "gpt-5.4-mini";
+const codexExecutable = await codexExecutableEvidence(
+  codexCommand, repositoryRoot);
 
 function digest(value) {
   return crypto.createHash("sha256").update(value, "utf8").digest("hex");
 }
 
 function codex(args, options = {}) {
-  const result = spawnSync(codexCommand, args, {
+  const result = spawnSync(codexExecutable.path, args, {
     cwd: options.cwd || repositoryRoot,
     encoding: "utf8",
     windowsHide: true,
@@ -299,6 +305,8 @@ const configAfter = await existingFileDigest(configPath).catch((error) => {
 });
 assert.equal(configAfter, configBefore, "The host probe changed persistent Codex configuration.");
 const version = String(codex(["--version"]).stdout).trim();
+const codexVersionToken = versionToken(version);
+assert.ok(codexVersionToken, "The tested Codex version token is missing.");
 
 const receipt = {
   schema_version: "1.0",
@@ -306,6 +314,10 @@ const receipt = {
   verified: true,
   verified_at: new Date().toISOString(),
   codex_version: version,
+  codex_version_token: codexVersionToken,
+  codex_executable_sha256: codexExecutable.sha256,
+  codex_executable_path_sha256: codexExecutable.path_sha256,
+  all_codex_invocations_use_resolved_executable: true,
   plugin_version: manifest.version,
   model,
   source_tree_sha256: sourceArtifacts.source_tree_sha256,

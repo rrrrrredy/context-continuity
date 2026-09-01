@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { ContinuityError } from "../plugins/context-continuity/src/errors.mjs";
+import { assertPathInsideReal } from "../plugins/context-continuity/src/util.mjs";
 import {
   createHarness,
   observePrompt,
@@ -66,6 +67,123 @@ test("concurrent writes use expected_generation instead of last-write-wins", asy
   assert.equal(results.filter((result) => result.status === "fulfilled").length, 1);
   const rejected = results.find((result) => result.status === "rejected");
   assert.equal(rejected.reason.code, "GENERATION_CONFLICT");
+});
+
+test("lock acquisition validates the stable directory before leaf creation", async (t) => {
+  const harness = await createHarness(t, "lock-containment-race");
+  const taskRef = "session:lock-containment-race";
+  const releaseOwner = await harness.service.store.acquireLock(taskRef);
+  const lockPath = harness.service.store.lockPath(taskRef);
+  const originalRealpath = fs.realpath;
+  const originalOpen = fs.open;
+  const sentinel = Object.assign(
+    new Error("Stop after the pre-open containment check."),
+    { code: "TEST_STOP_AFTER_CONTAINMENT" }
+  );
+  let leafRealpathCalls = 0;
+
+  fs.realpath = async (target) => {
+    if (path.resolve(target) === path.resolve(lockPath)) {
+      leafRealpathCalls += 1;
+    }
+    return originalRealpath(target);
+  };
+  fs.open = async (target, ...args) => {
+    if (path.resolve(target) === path.resolve(lockPath)) {
+      throw sentinel;
+    }
+    return originalOpen(target, ...args);
+  };
+  try {
+    await assert.rejects(
+      harness.service.store.acquireLock(taskRef),
+      (error) => error === sentinel
+    );
+  } finally {
+    fs.realpath = originalRealpath;
+    fs.open = originalOpen;
+    await releaseOwner();
+  }
+
+  assert.equal(
+    leafRealpathCalls,
+    0,
+    "The transient lock leaf must not be realpath-resolved before open(wx)."
+  );
+});
+
+test("realpath validation restarts when the nearest leaf disappears", async (t) => {
+  const harness = await createHarness(t, "realpath-retry");
+  const ephemeralPath = path.join(harness.root, "ephemeral.lock");
+  await fs.writeFile(ephemeralPath, "temporary", "utf8");
+
+  const originalRealpath = fs.realpath;
+  let removedDuringValidation = false;
+  fs.realpath = async (target) => {
+    if (!removedDuringValidation
+        && path.resolve(target) === path.resolve(ephemeralPath)) {
+      removedDuringValidation = true;
+      await fs.rm(ephemeralPath, { force: true });
+      const error = new Error("Simulated lstat/realpath removal race.");
+      error.code = "ENOENT";
+      throw error;
+    }
+    return originalRealpath(target);
+  };
+  try {
+    await assertPathInsideReal(harness.root, ephemeralPath);
+  } finally {
+    fs.realpath = originalRealpath;
+  }
+
+  assert.equal(removedDuringValidation, true);
+});
+
+test("Windows EPERM is retried only after a leaf disappears", {
+  skip: process.platform !== "win32"
+}, async (t) => {
+  const harness = await createHarness(t, "realpath-eperm");
+  const transientPath = path.join(harness.root, "transient.lock");
+  await fs.writeFile(transientPath, "temporary", "utf8");
+
+  const originalRealpath = fs.realpath;
+  let transientTriggered = false;
+  fs.realpath = async (target) => {
+    if (!transientTriggered
+        && path.resolve(target) === path.resolve(transientPath)) {
+      transientTriggered = true;
+      await fs.rm(transientPath, { force: true });
+      const error = new Error("Simulated Windows delete race.");
+      error.code = "EPERM";
+      throw error;
+    }
+    return originalRealpath(target);
+  };
+  try {
+    await assertPathInsideReal(harness.root, transientPath);
+  } finally {
+    fs.realpath = originalRealpath;
+  }
+  assert.equal(transientTriggered, true);
+
+  const persistentPath = path.join(harness.root, "persistent.lock");
+  await fs.writeFile(persistentPath, "still present", "utf8");
+  const persistentError = new Error("Simulated persistent permission failure.");
+  persistentError.code = "EPERM";
+  fs.realpath = async (target) => {
+    if (path.resolve(target) === path.resolve(persistentPath)) {
+      throw persistentError;
+    }
+    return originalRealpath(target);
+  };
+  try {
+    await assert.rejects(
+      assertPathInsideReal(harness.root, persistentPath),
+      (error) => error === persistentError
+    );
+  } finally {
+    fs.realpath = originalRealpath;
+  }
 });
 
 test("snapshot retention keeps exactly the three most recent snapshots", async (t) => {

@@ -2,6 +2,47 @@
 
 All notable changes are documented here. This project follows Semantic Versioning.
 
+## [0.2.0-beta.2] - 2026-09-01
+
+### Changed
+
+- Frozen the adjacent-product boundary against Execution Fidelity Guard
+  `0.2.2` and the separate unofficial DeepSeek Harness Guard adapter
+  `0.1.0-alpha.2`.
+- Documented the exact seven-field Guard intent projection, immutable
+  `contract_ref/version` semantics, current wire versions, and the reserved
+  Continuity snapshot.
+- Distinguished the Context Continuity DSH adapter from the separate Guard DSH
+  adapter. Both Guard-facing contracts are read-only with no state write-back;
+  the Continuity adapter still writes only its own ledger.
+- Release version advanced to `0.2.0-beta.2`; install examples now pin the new
+  prerelease.
+- Clarified DSH profile initialization, adjacent-product responsibilities,
+  off/reset/delete effects, ledger-corruption recovery, and the difference
+  between default path candidates and actual runtime paths.
+- Hardened lock acquisition and real-path validation against transient
+  lstat/realpath removal races, including Windows `EPERM`, without masking
+  persistent permission failures.
+
+### Evidence
+
+- Refreshed all eight source-bound receipts. Four Codex installed receipts also
+  bind the byte-identical installed cache; the DSH package receipt binds its
+  isolated tarball.
+- Repository validation rejects stale Guard version claims, missing beta.2
+  release notes, or documentation that implies a live Continuity bridge.
+- Expanded the core suite to 91 tests with deterministic removal-race and
+  Windows permission-classification regressions.
+
+### Known limitations
+
+- Guard `0.2.2` does not load the reserved Continuity snapshot.
+- No live Intent Loop or Continuity producer/consumer bridge ships.
+- The separate DSH Guard adapter targets Harness `0.1.2-alpha.2`, while this
+  project's Continuity adapter remains pinned to Harness `0.1.1-rc.2`.
+- Real-task efficacy, authenticated real-Mac Codex lifecycle, DSH CLI profile
+  installation, and engine-generated automatic compaction remain unverified.
+
 ## [0.2.0-beta.1] - 2026-08-31
 
 ### Added
@@ -98,3 +139,4 @@ All notable changes are documented here. This project follows Semantic Versionin
 [0.1.0]: https://github.com/rrrrrredy/context-continuity/releases/tag/v0.1.0
 
 [0.2.0-beta.1]: https://github.com/rrrrrredy/context-continuity/releases/tag/v0.2.0-beta.1
+[0.2.0-beta.2]: https://github.com/rrrrrredy/context-continuity/releases/tag/v0.2.0-beta.2

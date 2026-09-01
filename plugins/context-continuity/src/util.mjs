@@ -383,50 +383,94 @@ export async function assertPathInsideReal(parent, candidate) {
   const candidateResolved = path.resolve(candidate);
   const relativeCandidate = path.relative(parentResolved, candidateResolved);
   const segments = relativeCandidate === "" ? [] : relativeCandidate.split(path.sep);
-  let current = parentResolved;
-  let nearestExisting = null;
-  const pathsToCheck = [parentResolved, ...segments.map((segment) => {
-    current = path.join(current, segment);
-    return current;
-  })];
-  for (const target of pathsToCheck) {
-    try {
-      const stats = await fs.lstat(target);
-      if (stats.isSymbolicLink()) {
-        throw new ContinuityError(
-          "REALPATH_ESCAPE",
-          "State paths cannot traverse a symbolic link or junction.",
-          { parent: parentResolved, candidate: candidateResolved }
-        );
+  const maximumAttempts = 3;
+
+  for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
+    let current = parentResolved;
+    let nearestExisting = null;
+    const pathsToCheck = [parentResolved, ...segments.map((segment) => {
+      current = path.join(current, segment);
+      return current;
+    })];
+    for (const target of pathsToCheck) {
+      try {
+        const stats = await fs.lstat(target);
+        if (stats.isSymbolicLink()) {
+          throw new ContinuityError(
+            "REALPATH_ESCAPE",
+            "State paths cannot traverse a symbolic link or junction.",
+            { parent: parentResolved, candidate: candidateResolved }
+          );
+        }
+        nearestExisting = target;
+      } catch (error) {
+        if (error.code === "ENOENT") {
+          break;
+        }
+        throw error;
       }
-      nearestExisting = target;
-    } catch (error) {
+    }
+    if (!nearestExisting) {
+      return;
+    }
+
+    const wasRemovedDuringValidation = async (error, target) => {
       if (error.code === "ENOENT") {
-        break;
+        return true;
+      }
+      if (process.platform !== "win32" || error.code !== "EPERM") {
+        return false;
+      }
+      try {
+        await fs.lstat(target);
+        return false;
+      } catch (probeError) {
+        return probeError.code === "ENOENT";
+      }
+    };
+    const pathRaceError = () => new ContinuityError(
+      "PATH_VALIDATION_RACE",
+      "State path validation could not stabilize after repeated filesystem changes.",
+      { parent: parentResolved, candidate: candidateResolved }
+    );
+
+    let realParent;
+    try {
+      realParent = await fs.realpath(parentResolved);
+    } catch (error) {
+      const transient = await wasRemovedDuringValidation(error, parentResolved);
+      if (transient && attempt < maximumAttempts) {
+        continue;
+      }
+      if (transient) {
+        throw pathRaceError();
       }
       throw error;
     }
-  }
-  if (!nearestExisting) {
-    return;
-  }
-  let realParent;
-  try {
-    realParent = await fs.realpath(parentResolved);
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      return;
+
+    let realCandidate;
+    try {
+      realCandidate = await fs.realpath(nearestExisting);
+    } catch (error) {
+      const transient = await wasRemovedDuringValidation(error, nearestExisting);
+      if (transient && attempt < maximumAttempts) {
+        continue;
+      }
+      if (transient) {
+        throw pathRaceError();
+      }
+      throw error;
     }
-    throw error;
-  }
-  const realCandidate = await fs.realpath(nearestExisting);
-  const relative = path.relative(realParent, realCandidate);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    throw new ContinuityError(
-      "REALPATH_ESCAPE",
-      "Resolved state path escapes the configured data root through a link or junction.",
-      { parent: realParent, candidate: realCandidate }
-    );
+
+    const relative = path.relative(realParent, realCandidate);
+    if (relative.startsWith("..") || path.isAbsolute(relative)) {
+      throw new ContinuityError(
+        "REALPATH_ESCAPE",
+        "Resolved state path escapes the configured data root through a link or junction.",
+        { parent: realParent, candidate: realCandidate }
+      );
+    }
+    return;
   }
 }
 

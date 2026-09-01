@@ -19,8 +19,8 @@ Agent 在压缩后可能还能流畅回答，却已经忘了真正目标、硬�
 
 ## 当前状态
 
-`0.2.0-beta.1` 是发布候选；只有同名公开 tag 和 GitHub prerelease 已存在时，
-下面固定 tag 的安装命令才有效。
+`0.2.0-beta.2` 是发布候选。只有同名公开 tag 和 GitHub prerelease 已存在后，
+它才成为固定公开预发行版，下面的安装命令也才有效。
 
 | 宿主 / 平台 | 支持程度 |
 | --- | --- |
@@ -40,7 +40,7 @@ Agent 在压缩后可能还能流畅回答，却已经忘了真正目标、硬�
 macOS、Linux 和 Windows 使用同样的命令：
 
 ```sh
-codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.1
+codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.2
 codex plugin add context-continuity@context-continuity
 ```
 
@@ -75,11 +75,14 @@ Mac 的证据边界见
 
 ## 安装到 DeepSeek Harness
 
-要求：DeepSeek Harness `0.1.1-rc.2`、Node.js 20 或更新版本，以及
-`pnpm`。把 `<profile>` 换成实际 profile：
+要求：DeepSeek Harness `0.1.1-rc.2`、Node.js 20 或更新版本，以及 `pnpm`。
+`<profile>` 是 `$DSH_HOME/profiles/<name>` 下一个可运行组合的名字。可使用已有
+profile，也可给预览测试单独取名；官方的首次
+`dsh plugin --profile <name> add ...` 会初始化它。详见
+[官方 profile/plugin 指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)。
 
 ```sh
-dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.1
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.2
 dsh --profile <profile> --dump-config
 ```
 
@@ -96,6 +99,17 @@ profile 启动后也可以使用上面的自然语言测试。
 patch 会加入适配器，不需要另一套状态格式。
 详见[适配器使用说明](adapters/deepseek-harness/README.md)和
 [能力核验记录](docs/platform/deepseek-harness-capability-2026-08-31.md)。
+
+Context Continuity 和 Execution Fidelity Guard 是两个独立产品：
+
+| 产品 | 职责 |
+| --- | --- |
+| Context Continuity | 在有损上下文转换前后保存并核验任务状态 |
+| Execution Fidelity Guard | 根据当前状态判断待执行动作与完成声明 |
+
+两者目前没有实时桥接。本仓库的 DSH 适配器面向 Harness `0.1.1-rc.2`；另一个
+Guard DSH 适配器面向 `0.1.2-alpha.2`。不要把它们当成能在同一 profile 中自动
+协同的一对组件。
 
 ## 用户会看到什么
 
@@ -122,6 +136,13 @@ patch 会加入适配器，不需要另一套状态格式。
 - “关闭这个任务的连续性保护。”
 - “删除这个任务的连续性状态。”
 
+| 操作 | 确切效果 |
+| --- | --- |
+| 关闭 | 停止为该任务新增自动连续性写入；旧状态仍可查看和导出 |
+| 重置 | 清空当前有效投影并开始新 generation，同时保留追加式历史；诊断 CLI 会归档旧任务目录 |
+| 删除 | 只删除当前任务的 Continuity 状态及对应 Continuity 归档，不删除项目文件、原始对话、宿主记忆或其他任务 |
+
+关闭、开启、重置和删除都要求可读的第二次精确确认。
 需要写入用户权威状态时，插件会给出一段可读的精确确认内容。用户检查后原样确认，
 模型转述或旧消息不能代替确认。
 
@@ -142,11 +163,21 @@ Codex 默认数据目录是
 `$DSH_HOME/plugin-data/context-continuity/v1`。隔离测试或托管环境可显式设置
 `CONTEXT_CONTINUITY_DATA_DIR`。
 
+| 故障 | 安全处置 |
+| --- | --- |
+| Node 或 Hook 启动失败 | 保护未生效。把 Node.js 20+ 加入宿主进程 PATH，重启，检查 `/hooks`，再跑一次 smoke test |
+| 恢复内容错误 | 提交纠正并做第二次精确确认；纠正生效前暂停受影响的高风险动作 |
+| ledger 哈希损坏 | 保留损坏数据。`rebuild` 只能核验并重建有效 ledger 的投影，不能修复哈希不一致；只有独立确认精确 task_ref 和实际数据目录后，才使用按任务诊断删除 |
+| DSH layer 缺失 | 保护未生效。重新加入固定 tag，重启 profile，再用 `--dump-config` 核验 |
+
+[使用指南](docs/usage.md#数据位置与卸载)中的默认路径命令只打印候选值，不保证是
+运行时实际路径。手工删除前必须核对覆盖变量和安装缓存推导。
+
 ## 已有证据
 
 仓库发布门槛包含：
 
-- 88 个核心测试和 7 个 DSH 适配/集成测试；
+- 91 个核心测试和 7 个 DSH 适配/集成测试；
 - 真实 Codex 手动压缩与连续自动压缩收据；
 - 字节一致的安装缓存生命周期收据；
 - 安装态宿主只读发现收据；
@@ -207,7 +238,8 @@ dsh plugin --profile <profile> remove context-continuity
 
 卸载不会悄悄删掉任务 ledger。需要彻底清理时，先说“删除这个任务的连续性状态”，
 把第二次精确确认原样发回，并核对该任务状态已经消失。只有插件无法运行时才手工
-解析并检查精确数据路径，再删除 `plugin-data/context-continuity`；详见
+定位运行时配置和安装缓存推导出的实际数据目录；不要把默认路径候选当成精确值。
+检查目标后再删除 `plugin-data/context-continuity`；详见
 [隐私与删除](docs/privacy.md)。
 
 ## 许可证

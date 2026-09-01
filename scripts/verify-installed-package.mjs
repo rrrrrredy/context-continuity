@@ -9,15 +9,21 @@ import {
   directoryArtifactDigest,
   releaseArtifactDigests
 } from "./artifact-digests.mjs";
+import {
+  codexExecutableEvidence,
+  versionToken
+} from "./codex-executable-evidence.mjs";
 
 const repositoryRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const pluginRootIndex = process.argv.indexOf("--plugin-root");
 const outputIndex = process.argv.indexOf("--output");
+const codexCommand = process.env.CONTEXT_CONTINUITY_CODEX_BIN || "codex";
+const codexExecutable = await codexExecutableEvidence(
+  codexCommand, repositoryRoot);
 
 function discoverInstalledPluginRoot() {
-  const codexCommand = process.env.CONTEXT_CONTINUITY_CODEX_BIN || "codex";
   const result = spawnSync(
-    codexCommand,
+    codexExecutable.path,
     ["mcp", "get", "context_continuity", "--json"],
     {
       encoding: "utf8",
@@ -452,17 +458,24 @@ try {
   assert.equal(remainingText.includes(secretMarker), false);
   assert.equal(remainingText.includes(digest(secretMarker).slice(0, 12)), false);
 
-  const versionOutput = spawnSync("codex", ["--version"], {
+  const versionOutput = spawnSync(codexExecutable.path, ["--version"], {
     encoding: "utf8",
     windowsHide: true
   });
   assert.equal(versionOutput.status, 0);
+  const codexVersion = String(versionOutput.stdout || versionOutput.stderr).trim();
+  const codexVersionToken = versionToken(codexVersion);
+  assert.ok(codexVersionToken, "The tested Codex version token is missing.");
   const receipt = {
     schema_version: "1.0",
     run_kind: "installed_package_e2e",
     verified: true,
     verified_at: new Date().toISOString(),
-    codex_version: String(versionOutput.stdout).trim(),
+    codex_version: codexVersion,
+    codex_version_token: codexVersionToken,
+    codex_executable_sha256: codexExecutable.sha256,
+    codex_executable_path_sha256: codexExecutable.path_sha256,
+    all_codex_invocations_use_resolved_executable: true,
     plugin_version: manifest.version,
     source_tree_sha256: sourceArtifacts.source_tree_sha256,
     source_plugin_package_sha256: sourceArtifacts.plugin_package_sha256,

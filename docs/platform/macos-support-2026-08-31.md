@@ -21,7 +21,7 @@ node --version
 ```
 
 ```sh
-codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.1
+codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.2
 codex plugin add context-continuity@context-continuity
 ```
 
@@ -66,7 +66,7 @@ printf '%s\n' "${CODEX_HOME:-$HOME/.codex}/plugin-data/context-continuity/v1"
 ### DeepSeek Harness on macOS
 
 ```sh
-dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.1
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.2
 dsh --profile <profile> --dump-config
 ```
 

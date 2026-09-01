@@ -1,6 +1,6 @@
 {
   "name": "context-continuity",
-  "version": "0.2.0-beta.1+codex.20260831042041",
+  "version": "0.2.0-beta.2",
   "private": true,
   "description": "Local-first continuity plugin for Codex and DeepSeek Harness that preserves source-aware task invariants across lossy context transitions.",
   "license": "Apache-2.0",

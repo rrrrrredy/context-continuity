@@ -17,7 +17,7 @@
     "schema_version": { "const": "1.0" },
     "contract_ref": { "type": "string", "minLength": 1 },
     "contract_version": { "type": "integer", "minimum": 1 },
-    "phase": { "type": "string" },
+    "phase": { "type": "string", "minLength": 1 },
     "open_commitments": {
       "type": "array",
       "uniqueItems": true,

@@ -1,6 +1,6 @@
 {
   "name": "context-continuity",
-  "version": "0.2.0-beta.1+codex.20260831042041",
+  "version": "0.2.0-beta.2",
   "description": "Preserve and verify task invariants across compaction, resume, and agent handoffs on Codex.",
   "author": {
     "name": "Song Luo"

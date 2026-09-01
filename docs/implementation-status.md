@@ -1,6 +1,6 @@
 # 实现状态
 
-版本：`0.2.0-beta.1`
+版本：`0.2.0-beta.2`
 
 ## 已实现
 
@@ -23,7 +23,7 @@
 - `PreCompact`、`PostCompact`、compact/resume/clear `SessionStart`、
   `UserPromptSubmit`、Subagent 与 SessionEnd 闭环。
 - 真实手动压缩、连续自动压缩、字节一致安装缓存、宿主只读发现和安装包 E2E 收据。
-- 88 个核心测试、Hook/MCP smoke、30 案例协议 fixture 和仓库验证器。
+- 91 个核心测试、Hook/MCP smoke、30 案例协议 fixture 和仓库验证器。
 
 ### DeepSeek Harness
 
@@ -55,8 +55,11 @@
 
 - Intent provider：核心测试覆盖版本回退、同版本碰撞和 hash 不一致；公共表面无安全
   provider 身份隔离，所以不开放绑定。
-- Continuity-to-Guard：shape 已冻结并测试；Execution Fidelity Guard v0.2 当前没有
-  live Continuity bridge，也没有 DSH adapter。
+- Continuity-to-Guard：保留的七字段 snapshot shape 已冻结并测试；Execution
+  Fidelity Guard `0.2.2` 不读取该 snapshot，仍没有 live Continuity producer 或
+  consumer bridge。
+- 独立的非官方 DeepSeek Harness Guard adapter `0.1.0-alpha.2` 已发布；它遵守相同
+  的只读所有权边界，但不是 Context Continuity 的实时集成。
 - 同时安装 Intent Loop、Context Continuity 和 Guard 不会自动形成三套或一套共享真相。
 
 ## 尚需真实验证

@@ -13,6 +13,10 @@ import {
   directoryArtifactDigest,
   releaseArtifactDigests
 } from "./artifact-digests.mjs";
+import {
+  codexExecutableEvidence,
+  versionToken
+} from "./codex-executable-evidence.mjs";
 
 const repositoryRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const pluginRootIndex = process.argv.indexOf("--plugin-root");
@@ -229,8 +233,38 @@ async function waitForTurn(rpc, threadId, response) {
   return turnId;
 }
 
+async function readCodexVersion(command, workingDirectory) {
+  return new Promise((resolve, reject) => {
+    const versionChild = spawn(command, ["--version"], {
+      cwd: workingDirectory,
+      env: process.env,
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    let stdout = "";
+    let versionStderr = "";
+    versionChild.stdout.setEncoding("utf8");
+    versionChild.stderr.setEncoding("utf8");
+    versionChild.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    versionChild.stderr.on("data", (chunk) => {
+      versionStderr += chunk;
+    });
+    versionChild.on("error", reject);
+    versionChild.on("close", (code) => {
+      const value = (stdout || versionStderr).trim();
+      if (code !== 0 || !value) {
+        reject(new Error("Unable to read the tested Codex version."));
+        return;
+      }
+      resolve(value.slice(0, 256));
+    });
+  });
+}
+
 const startedAt = new Date().toISOString();
 const codexCommand = process.env.CONTEXT_CONTINUITY_CODEX_BIN || "codex";
+const codexExecutable = await codexExecutableEvidence(codexCommand, cwd);
 const appArgs = [
   "app-server",
   "--stdio",
@@ -247,7 +281,7 @@ if (mode === "auto") {
     "model_auto_compact_token_limit_scope=\"body_after_prefix\""
   );
 }
-const child = spawn(codexCommand, appArgs, {
+const child = spawn(codexExecutable.path, appArgs, {
   cwd,
   env: {
     ...process.env,
@@ -255,6 +289,13 @@ const child = spawn(codexCommand, appArgs, {
   },
   stdio: ["pipe", "pipe", "pipe"]
 });
+const normalizeExecutablePath = (value) => process.platform === "win32"
+  ? path.resolve(value).toLocaleLowerCase("en-US")
+  : path.resolve(value);
+const appServerExecutablePathMatched = normalizeExecutablePath(child.spawnfile)
+  === normalizeExecutablePath(codexExecutable.path);
+assert.equal(appServerExecutablePathMatched, true,
+  "The App Server did not start from the resolved Codex executable.");
 let stderr = "";
 child.stderr.setEncoding("utf8");
 child.stderr.on("data", (chunk) => {
@@ -263,9 +304,16 @@ child.stderr.on("data", (chunk) => {
 const closed = new Promise((resolve) => child.on("close", resolve));
 const rpc = new JsonLineRpc(child);
 let receipt;
+let codexVersion = null;
+let codexVersionToken = null;
+let appServerIdentity = null;
+let versionIdentityMatched = false;
 
 try {
-  await rpc.request("initialize", {
+  codexVersion = await readCodexVersion(codexExecutable.path, cwd);
+  codexVersionToken = versionToken(codexVersion);
+  assert.ok(codexVersionToken, "The Codex CLI version token is missing.");
+  const initializeResponse = await rpc.request("initialize", {
     clientInfo: {
       name: "context-continuity-lifecycle-validator",
       version: "0.1.0"
@@ -274,6 +322,19 @@ try {
       experimentalApi: true
     }
   });
+  const appServerVersionToken = versionToken(initializeResponse.userAgent);
+  assert.ok(appServerVersionToken, "The App Server user agent version token is missing.");
+  assert.equal(appServerVersionToken, codexVersionToken,
+    "The App Server and --version process identities disagree.");
+  assert.ok(initializeResponse.platformFamily);
+  assert.ok(initializeResponse.platformOs);
+  appServerIdentity = {
+    user_agent_sha256: sha256(initializeResponse.userAgent),
+    version_token: appServerVersionToken,
+    platform_family: initializeResponse.platformFamily,
+    platform_os: initializeResponse.platformOs
+  };
+  versionIdentityMatched = true;
   rpc.notify("initialized");
 
   const hookListing = await rpc.request("hooks/list", { cwds: [cwd] });
@@ -515,7 +576,9 @@ try {
     && nextActionPresent
     && nextActionRequiresRevalidation
     && !unrelatedHookRan
-    && recoverySafe;
+    && recoverySafe
+    && versionIdentityMatched
+    && appServerExecutablePathMatched;
 
   receipt = {
     schema_version: "1.0",
@@ -524,7 +587,16 @@ try {
     verified,
     started_at: startedAt,
     completed_at: new Date().toISOString(),
-    codex_version: "codex-cli 0.150.0-alpha.8",
+    codex_version: codexVersion,
+    codex_version_token: codexVersionToken,
+    codex_executable_sha256: codexExecutable.sha256,
+    codex_executable_path_sha256: codexExecutable.path_sha256,
+    app_server_executable_path_matched: appServerExecutablePathMatched,
+    app_server_user_agent_sha256: appServerIdentity.user_agent_sha256,
+    app_server_version_token: appServerIdentity.version_token,
+    app_server_platform_family: appServerIdentity.platform_family,
+    app_server_platform_os: appServerIdentity.platform_os,
+    version_identity_matched: versionIdentityMatched,
     plugin_runtime: pluginRuntime,
     app_server_method: mode === "manual"
       ? "thread/compact/start"
@@ -574,7 +646,16 @@ try {
     verified: false,
     started_at: startedAt,
     completed_at: new Date().toISOString(),
-    codex_version: "codex-cli 0.150.0-alpha.8",
+    codex_version: codexVersion,
+    codex_version_token: codexVersionToken,
+    codex_executable_sha256: codexExecutable.sha256,
+    codex_executable_path_sha256: codexExecutable.path_sha256,
+    app_server_executable_path_matched: appServerExecutablePathMatched,
+    app_server_user_agent_sha256: appServerIdentity?.user_agent_sha256 || null,
+    app_server_version_token: appServerIdentity?.version_token || null,
+    app_server_platform_family: appServerIdentity?.platform_family || null,
+    app_server_platform_os: appServerIdentity?.platform_os || null,
+    version_identity_matched: versionIdentityMatched,
     prompt_or_assistant_content_in_receipt: false,
     persistent_install_or_trust_change: false,
     failure_reason: error.code

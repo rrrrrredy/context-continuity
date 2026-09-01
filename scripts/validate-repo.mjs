@@ -52,6 +52,7 @@ const required = [
   "spec/handoff-capsule.schema.json",
   "spec/execution-guard-view.schema.json",
   "spec/evaluation-result.schema.json",
+  "validation/fixtures/execution-fidelity-guard-v0.2.2-continuity-snapshot.schema.json",
   "evals/cases.json",
   "validation/README.md",
   "validation/real-manual.json",
@@ -74,6 +75,7 @@ const required = [
   "docs/release-readiness.md",
   "docs/release-notes-v0.1.0.md",
   "docs/release-notes-v0.2.0-beta.1.md",
+  "docs/release-notes-v0.2.0-beta.2.md",
   "docs/user-pilot-2026-08-29.md",
   "docs/platform/codex-capability-2026-08-28.md",
   "docs/platform/deepseek-harness-capability-2026-08-31.md",
@@ -83,7 +85,8 @@ const required = [
   "scripts/run-core-tests.mjs",
   "scripts/verify-installed-host-read.mjs",
   "scripts/verify-dsh-package.mjs",
-  "scripts/verify-dsh-lifecycle.mjs"
+  "scripts/verify-dsh-lifecycle.mjs",
+  "scripts/codex-executable-evidence.mjs"
 ];
 
 for (const relative of required) {
@@ -103,6 +106,7 @@ const jsonFiles = [
   "spec/handoff-capsule.schema.json",
   "spec/execution-guard-view.schema.json",
   "spec/evaluation-result.schema.json",
+  "validation/fixtures/execution-fidelity-guard-v0.2.2-continuity-snapshot.schema.json",
   "evals/cases.json",
   "validation/real-manual.json",
   "validation/real-auto.json",
@@ -138,6 +142,35 @@ function assertReceiptArtifactBinding(receipt, relative) {
   );
   assert.equal(receipt.plugin_package_sha256, artifactDigests.plugin_package_sha256,
     relative + " was not produced from a byte-identical plugin package.");
+}
+
+function assertCodexExecutableIdentity(receipt, relative, appServer = false) {
+  assert.match(
+    receipt.codex_version || "",
+    /^codex-cli \d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/,
+    relative + " has an invalid Codex version."
+  );
+  assert.match(
+    receipt.codex_version_token || "",
+    /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/,
+    relative + " has an invalid Codex version token."
+  );
+  assert.ok(receipt.codex_version.includes(receipt.codex_version_token));
+  assert.match(receipt.codex_executable_sha256 || "", /^[a-f0-9]{64}$/,
+    relative + " is missing the Codex executable digest.");
+  assert.match(receipt.codex_executable_path_sha256 || "", /^[a-f0-9]{64}$/,
+    relative + " is missing the resolved executable-path digest.");
+  assert.equal(Object.hasOwn(receipt, "codex_executable_path"), false);
+  if (appServer) {
+    assert.equal(receipt.app_server_executable_path_matched, true);
+    assert.equal(receipt.version_identity_matched, true);
+    assert.equal(receipt.app_server_version_token, receipt.codex_version_token);
+    assert.match(receipt.app_server_user_agent_sha256 || "", /^[a-f0-9]{64}$/);
+    assert.match(receipt.app_server_platform_family || "", /^(unix|windows)$/);
+    assert.match(receipt.app_server_platform_os || "", /^(linux|macos|windows)$/);
+  } else {
+    assert.equal(receipt.all_codex_invocations_use_resolved_executable, true);
+  }
 }
 
 const marketplace = parsed.get(".agents/plugins/marketplace.json");
@@ -198,6 +231,34 @@ assert.equal(marketplaceEntry.policy.installation, "AVAILABLE");
 assert.equal(marketplaceEntry.policy.authentication, "ON_INSTALL");
 assert.equal(marketplaceEntry.category, "Productivity");
 
+const guardView = parsed.get("spec/execution-guard-view.schema.json");
+const guardTaggedFixture = parsed.get(
+  "validation/fixtures/execution-fidelity-guard-v0.2.2-continuity-snapshot.schema.json"
+);
+assert.equal(guardTaggedFixture.title, "ContinuitySnapshot");
+assert.equal(guardTaggedFixture.additionalProperties, false);
+assert.deepEqual(guardView.required, guardTaggedFixture.required);
+for (const property of [
+  "schema_version",
+  "contract_ref",
+  "contract_version",
+  "phase",
+  "captured_at"
+]) {
+  assert.deepEqual(
+    guardView.properties[property],
+    guardTaggedFixture.properties[property],
+    "Continuity producer property drifted from Guard v0.2.2: " + property
+  );
+}
+for (const property of ["open_commitments", "evidence_refs"]) {
+  assert.equal(guardView.properties[property].type,
+    guardTaggedFixture.properties[property].type);
+  assert.deepEqual(guardView.properties[property].items,
+    guardTaggedFixture.properties[property].items);
+  assert.equal(guardView.properties[property].uniqueItems, true);
+}
+
 const dshPatch = await fs.readFile(
   path.join(root, "adapters", "deepseek-harness", "cordis.patch.yml"),
   "utf8"
@@ -208,7 +269,58 @@ const ciWorkflow = await fs.readFile(
   path.join(root, ".github", "workflows", "ci.yml"), "utf8");
 assert.match(ciWorkflow, /macos-latest/);
 assert.match(ciWorkflow, /npm run test:dsh/);
+const integrationContract = await fs.readFile(
+  path.join(root, "docs", "integration-contracts.md"), "utf8");
+assert.match(
+  integrationContract,
+  /execution-fidelity-guard\/blob\/v0\.2\.2\/docs\/integration-contract\.md/
+);
+assert.match(
+  integrationContract,
+  /dsh-execution-fidelity-guard\/releases\/tag\/v0\.1\.0-alpha\.2/
+);
+assert.match(integrationContract, /Guard \`0\.2\.2\` 不会加载该 snapshot/);
+assert.match(
+  integrationContract,
+  /不存在实时 Continuity producer 或 consumer/
+);
+assert.match(
+  integrationContract,
+  /DSH native ask 只授权当前那一次 pending call/
+);
+assert.doesNotMatch(integrationContract, /Guard v0\.2 当前/);
 assert.match(ciWorkflow, /npm run verify:dsh:package/);
+
+const readme = await fs.readFile(path.join(root, "README.md"), "utf8");
+const readmeZh = await fs.readFile(path.join(root, "README.zh-CN.md"), "utf8");
+const usageGuide = await fs.readFile(path.join(root, "docs", "usage.md"), "utf8");
+const dshGuide = await fs.readFile(
+  path.join(root, "adapters", "deepseek-harness", "README.md"),
+  "utf8"
+);
+const releaseNotesBeta2 = await fs.readFile(
+  path.join(root, "docs", "release-notes-v0.2.0-beta.2.md"),
+  "utf8"
+);
+assert.match(readme, /Version `0\.2\.0-beta\.2` is the release candidate/);
+assert.doesNotMatch(readme, /current pinned public prerelease/);
+assert.match(readme,
+  /Context Continuity and Execution Fidelity Guard are separate products/);
+assert.match(readme, /There is no live bridge between them/);
+assert.match(readme, /\| Off \| Stops new automatic continuity writes/);
+assert.match(readme, /\| Reset \| Clears the active projection/);
+assert.match(readme, /\| Delete \| Removes only this task's Continuity state/);
+assert.match(readmeZh, /`0\.2\.0-beta\.2` 是发布候选/);
+assert.match(readmeZh, /两者目前没有实时桥接/);
+assert.match(readmeZh, /默认路径命令只打印候选值/);
+assert.match(usageGuide, /不能修复哈希不一致/);
+assert.match(usageGuide, /只打印默认目录候选/);
+assert.match(usageGuide, /不要把它们当成/);
+assert.match(dshGuide, /official profile\/plugin guide/);
+assert.match(dshGuide, /default candidate, not a guaranteed runtime-resolved/);
+assert.match(releaseNotesBeta2, /Status: release candidate/);
+assert.doesNotMatch([readme, readmeZh, usageGuide, dshGuide].join("\n"),
+  /resolved exact path|解析后的精确路径/);
 
 const mcp = parsed.get(pluginPath(".mcp.json"));
 const server = mcp.mcpServers?.context_continuity;
@@ -273,6 +385,26 @@ for (const testCase of cases) {
   assert.ok(["manual", "auto"].includes(testCase.transition.trigger));
   assert.ok(testCase.transition.repeats >= 1);
 }
+
+const codexReceiptPaths = [
+  "validation/real-manual.json",
+  "validation/real-auto.json",
+  "validation/installed-package.json",
+  "validation/installed-host-read.json",
+  "validation/real-installed-manual.json",
+  "validation/real-installed-auto.json"
+];
+for (const relative of codexReceiptPaths) {
+  assertCodexExecutableIdentity(
+    parsed.get(relative),
+    relative,
+    parsed.get(relative).run_kind === "real_codex_lifecycle"
+  );
+}
+assert.equal(new Set(codexReceiptPaths.map((relative) =>
+  parsed.get(relative).codex_executable_sha256)).size, 1);
+assert.equal(new Set(codexReceiptPaths.map((relative) =>
+  parsed.get(relative).codex_version)).size, 1);
 
 for (const [relative, mode] of [
   ["validation/real-manual.json", "manual"],
@@ -439,6 +571,19 @@ for (const field of [
 ]) {
   assert.doesNotMatch(dshVerifierText, new RegExp(field + "\\s*:\\s*true"));
 }
+const codexLifecycleVerifierText = await fs.readFile(
+  path.join(root, "scripts/verify-real-lifecycle.mjs"),
+  "utf8"
+);
+assert.match(codexLifecycleVerifierText, /readCodexVersion/);
+assert.match(codexLifecycleVerifierText, /\["--version"\]/);
+assert.match(codexLifecycleVerifierText, /codexExecutableEvidence/);
+assert.match(codexLifecycleVerifierText, /initializeResponse\.userAgent/);
+assert.match(codexLifecycleVerifierText, /versionIdentityMatched/);
+assert.doesNotMatch(
+  codexLifecycleVerifierText,
+  /codex_version:\s*"codex-cli/
+);
 assert.equal(MAX_PROMPT_EXCERPT_CHARS, 512);
 assert.equal(MAX_TOKEN_BUDGET, 1500);
 assert.equal(SNAPSHOT_RETENTION, 3);

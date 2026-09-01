@@ -23,8 +23,9 @@ transcript, create long-term memory, plan the task, or replace host permissions.
 
 ## Status
 
-Version `0.2.0-beta.1` is the release candidate. The pinned install commands
-become valid only when the matching public tag and GitHub prerelease exist.
+Version `0.2.0-beta.2` is the release candidate. It becomes the pinned public
+prerelease, and the install commands below become valid, only after the matching
+public tag and GitHub prerelease exist.
 
 | Host / platform | Support level |
 | --- | --- |
@@ -46,7 +47,7 @@ and permission to inspect local Hooks.
 The commands are the same on macOS, Linux, and Windows shells:
 
 ```sh
-codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.1
+codex plugin marketplace add rrrrrredy/context-continuity --ref v0.2.0-beta.2
 codex plugin add context-continuity@context-continuity
 ```
 
@@ -85,11 +86,15 @@ For Mac-specific evidence and limits, see
 
 ## Install: DeepSeek Harness
 
-Requirements: DeepSeek Harness `0.1.1-rc.2`, Node.js 20 or newer, and
-`pnpm`. Replace `<profile>` with your actual profile:
+Requirements: DeepSeek Harness `0.1.1-rc.2`, Node.js 20 or newer, and `pnpm`.
+`<profile>` names one runnable DSH composition under
+`$DSH_HOME/profiles/<name>`. Use an existing profile or a dedicated preview
+name; the first official `dsh plugin --profile <name> add ...` call initializes
+that profile. See the
+[official profile/plugin guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md).
 
 ```sh
-dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.1
+dsh plugin --profile <profile> add github:rrrrrredy/context-continuity#v0.2.0-beta.2
 dsh --profile <profile> --dump-config
 ```
 
@@ -107,6 +112,18 @@ before the smoke test. The DSH bundle patch inserts the adapter; no separate
 state schema or fork is used. See the
 [adapter guide](adapters/deepseek-harness/README.md) and
 [capability record](docs/platform/deepseek-harness-capability-2026-08-31.md).
+
+Context Continuity and Execution Fidelity Guard are separate products:
+
+| Product | Responsibility |
+| --- | --- |
+| Context Continuity | Preserves and verifies task state across lossy context boundaries |
+| Execution Fidelity Guard | Classifies pending actions and completion claims against current state |
+
+There is no live bridge between them. This repository's DSH adapter targets
+Harness `0.1.1-rc.2`; the separate Guard DSH adapter targets
+`0.1.2-alpha.2`. Do not treat them as an automatically integrated pair in one
+profile.
 
 ## What users see
 
@@ -134,6 +151,13 @@ Users can say:
 - “Turn continuity protection off for this task.”
 - “Delete this task's continuity state.”
 
+| Action | Exact effect |
+| --- | --- |
+| Off | Stops new automatic continuity writes for this task; existing state remains readable and exportable |
+| Reset | Clears the active projection and starts a fresh generation while preserving append-only history; the diagnostic CLI archives the old task directory |
+| Delete | Removes only this task's Continuity state and matching Continuity archives; it does not delete project files, transcripts, host memory, or other tasks |
+
+Off, on, reset, and delete all require the readable exact second confirmation.
 User-authoritative structured state uses a readable, exact second confirmation.
 A model paraphrase or an old message cannot mint authority.
 
@@ -158,11 +182,23 @@ Codex data defaults to
 `$DSH_HOME/plugin-data/context-continuity/v1`. An explicit
 `CONTEXT_CONTINUITY_DATA_DIR` is supported for isolated or managed runs.
 
+| Failure | Safe response |
+| --- | --- |
+| Node or Hook startup failure | Protection is inactive. Put Node.js 20+ on the host process PATH, restart, inspect `/hooks`, and repeat the smoke test |
+| Recovered state is wrong | Submit a correction and its exact confirmation; pause any affected high-risk action until the correction is effective |
+| Ledger hash corruption | Preserve the damaged data. `rebuild` verifies and reprojects a valid ledger; it cannot repair a hash mismatch. Use task-scoped diagnostic deletion only when the exact task reference and actual data directory are independently known |
+| DSH layer missing | Protection is inactive. Re-add the pinned tag, restart the profile, and verify it with `--dump-config` |
+
+The default-path commands in the
+[usage guide](docs/usage.md#数据位置与卸载) print candidates, not guaranteed
+runtime-resolved paths. Verify overrides and installed-cache inference before
+manual deletion.
+
 ## Evidence
 
 The repository requires:
 
-- 88 core tests and 7 DeepSeek Harness adapter/integration tests;
+- 91 core tests and 7 DeepSeek Harness adapter/integration tests;
 - real Codex manual and consecutive automatic compaction receipts;
 - byte-identical installed-cache lifecycle receipts;
 - an installed-host read-only discovery receipt;
@@ -224,9 +260,11 @@ dsh plugin --profile <profile> remove context-continuity
 
 Removal does not silently delete ledgers. For a complete deletion, first say
 “Delete this task's continuity state,” send the exact second confirmation, and
-verify that the task state is gone. Only if the plugin cannot run, resolve and
-review the exact data path before removing `plugin-data/context-continuity`;
-see [privacy and deletion](docs/privacy.md).
+verify that the task state is gone. Only if the plugin cannot run, locate the
+actual data directory from runtime configuration and installed-cache inference;
+do not assume the default-path candidate is exact. Review the target before
+removing `plugin-data/context-continuity`; see
+[privacy and deletion](docs/privacy.md).
 
 ## License and support
 

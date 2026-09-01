@@ -1,6 +1,6 @@
-# Release readiness: v0.2.0-beta.1
+# Release readiness: v0.2.0-beta.2
 
-Decision date: 2026-08-31
+Decision date: 2026-09-01
 Decision: **GO for a pinned public prerelease after all tagged CI matrix jobs
 pass; NO RESULT for efficacy; NOT GA**
 
@@ -25,7 +25,7 @@ efficacy remains **NO RESULT**.
 
 | Surface | Evidence | Result |
 | --- | --- | --- |
-| Core behavior | Node test suite | 87 passed on the local release candidate; tagged CI is authoritative across OS/Node matrix |
+| Core behavior | Node test suite | 91 passed on the local release candidate; tagged CI is authoritative across OS/Node matrix |
 | Codex source lifecycle | `validation/real-manual.json`, `validation/real-auto.json` | Real manual and at least two consecutive automatic compactions with Pre/PostCompact, compact SessionStart, App Server start/completion, and stale next action |
 | Codex installed lifecycle | `validation/real-installed-manual.json`, `validation/real-installed-auto.json` | Same real lifecycle using a byte-identical installed cache package |
 | Codex host discovery | `validation/installed-host-read.json` | Fresh ephemeral read-only process discovered the MCP and made exactly one physical state read without changing plugin data or Codex configuration |
@@ -67,8 +67,11 @@ efficacy remains **NO RESULT**.
 - No long-term independent-user dogfood or completed three-arm efficacy study.
 - Ordinary source Hook startup was last measured on Windows/Node 20; installed
   client and Mac end-to-end latency require separate measurement.
-- Intent Loop and Execution Fidelity Guard contracts are aligned, but no live
-  bridge ships. Guard v0.2 has a file provider only and no DSH adapter.
+- Intent Loop and Execution Fidelity Guard `0.2.2` contracts are aligned, but
+  no live Intent Loop or Continuity bridge ships.
+- A separate unofficial DeepSeek Harness Guard adapter `0.1.0-alpha.2` exists;
+  it does not load the reserved Continuity snapshot or create an automatic
+  three-product integration.
 
 ## Allowed market claims
 
