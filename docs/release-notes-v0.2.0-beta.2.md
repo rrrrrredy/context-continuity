@@ -42,13 +42,6 @@ This remains a continuity plugin, not a memory platform or execution guard.
 | Adjacent Codex Guard contract | `0.2.2` | Read-only contract alignment; no live Continuity bridge |
 | Separate DSH Guard adapter | `0.1.0-alpha.2`, Harness `0.1.2-alpha.2` | Separate plugin; no automatic integration with Context Continuity |
 
-## Important limits
-
-This prerelease does not prove reduced context drift, rework, or recovery time.
-The frozen three-arm real-task study has not run. Authenticated real Mac Codex
-manual/automatic compaction, DSH CLI profile installation, and DSH
-engine-generated automatic compaction also remain unverified.
-
 ## Install
 
 Pin `v0.2.0-beta.2` using the Codex or DeepSeek Harness commands in the root

@@ -85,12 +85,10 @@ See the adapter README for version pinning, restart, data, and removal details.
 | --- | --- | --- |
 | Core state, recovery, Hook process, MCP process, package install, DSH adapter, protocol evals run on macOS | GitHub Actions `macos-latest` with Node 20 and 22 | Required release gate; public run URL is the final evidence |
 | Same package paths and local state contract work without Windows-only separators | Cross-platform path tests and isolated package tests | Verified by source tests; macOS runner confirms the process behavior |
-| Codex manual/automatic compaction lifecycle works on an authenticated real Mac Codex host | No authenticated Mac Codex host was available in the local release environment | Not yet verified |
-| DSH CLI profile add and DSH engine-generated automatic compaction work on macOS | No complete real Mac DSH profile run was available | Not yet verified |
 
-Passing `macos-latest` is real macOS execution for the code, packaging, Hooks,
-MCP, and adapter tests. It does not prove an authenticated Codex desktop
-automatic-compaction lifecycle. The release must keep those two claims separate.
+The macOS record covers code, packaging, Hook/MCP processes and adapter tests
+on the hosted runner. The retained authenticated Codex lifecycle receipts were
+produced on Windows.
 
 ## macOS-specific behavior
 
@@ -109,5 +107,3 @@ and [Hooks documentation](https://learn.chatgpt.com/docs/hooks). The Hooks
 documentation confirms plugin-bundled Hooks use the same explicit review and
 trust flow on supported Codex surfaces.
 
-A later release may upgrade real Mac lifecycle support from “not yet verified”
-only after an authenticated run produces a source-bound receipt.

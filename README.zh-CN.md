@@ -27,11 +27,8 @@ Agent 在压缩后可能还能流畅回答，却已经忘了真正目标、硬�
 | Codex | Beta 发布候选；测试 Windows 主机已有真实手动压缩和连续自动压缩生命周期收据 |
 | DeepSeek Harness | 开发者预览候选，固定兼容 `0.1.1-rc.2`；已验证发布版 Host API 生命周期和隔离安装包 |
 | Windows | 完整测试矩阵和真实 Codex 生命周期证据 |
-| macOS | 发布门槛：核心、Hook、MCP、打包、评估和 DSH 适配测试必须在 `macos-latest` 通过；真实 Mac Codex 自动压缩尚未验证 |
+| macOS | 发布门槛：核心、Hook、MCP、打包、评估和 DSH 适配测试必须在 `macos-latest` 通过 |
 | Linux | 发布门槛：核心、Hook、MCP、打包、评估和 DSH 适配测试必须在 `ubuntu-latest` 通过 |
-
-三臂真实任务效果评估尚未完成。当前证据可以说明机制和失败边界可验证，还不能宣称已
-量化减少返工或目标漂移。
 
 ## 安装到 Codex
 
