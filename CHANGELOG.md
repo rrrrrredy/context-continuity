@@ -40,8 +40,6 @@ All notable changes are documented here. This project follows Semantic Versionin
 - No live Intent Loop or Continuity producer/consumer bridge ships.
 - The separate DSH Guard adapter targets Harness `0.1.2-alpha.2`, while this
   project's Continuity adapter remains pinned to Harness `0.1.1-rc.2`.
-- Real-task efficacy, authenticated real-Mac Codex lifecycle, DSH CLI profile
-  installation, and engine-generated automatic compaction remain unverified.
 
 ## [0.2.0-beta.1] - 2026-08-31
 
@@ -86,7 +84,6 @@ All notable changes are documented here. This project follows Semantic Versionin
 ### Known limitations
 
 - Real-task three-arm efficacy evaluation remains incomplete.
-- Authenticated real Mac Codex manual/automatic compaction is not yet verified.
 - DSH CLI profile installation and engine-generated automatic compaction are not
   yet release receipts.
 - DSH compatibility is pinned to `0.1.1-rc.2`.

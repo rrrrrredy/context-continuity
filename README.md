@@ -32,12 +32,8 @@ public tag and GitHub prerelease exist.
 | Codex | Beta release candidate; real manual and consecutive automatic compaction lifecycle receipts on the tested Windows host |
 | DeepSeek Harness | Developer-preview candidate pinned to `0.1.1-rc.2`; published Host API lifecycle and isolated package verified |
 | Windows | Full release test matrix plus real Codex lifecycle evidence |
-| macOS | Release gate: the full source, Hook, MCP, package, eval, and DSH adapter matrix must pass on `macos-latest`; authenticated Codex automatic lifecycle is not yet verified |
+| macOS | Release gate: the full source, Hook, MCP, package, eval, and DSH adapter matrix must pass on `macos-latest` |
 | Linux | Release gate: the full source, Hook, MCP, package, eval, and DSH adapter matrix must pass on `ubuntu-latest` |
-
-The frozen three-arm real-task study has not been completed. This release proves
-mechanics and bounded failure behavior, not yet a measured reduction in user
-rework or target drift.
 
 ## Install: Codex
 

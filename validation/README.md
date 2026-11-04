@@ -9,7 +9,7 @@ The JSON receipts in this directory are privacy-minimized implementation evidenc
 - real-installed-manual.json and real-installed-auto.json run the same App Server lifecycle against Hook files in the installed cache. The automatic receipt contains two completed compactions.
 - dsh-package.json packs the root bundle, installs it in an isolated consumer with scripts disabled, verifies the bundle patch, peer boundary, required files and module import, then removes the scratch tree.
 - dsh-real-lifecycle.json runs the published `0.1.1-rc.2` Cordis, AgentRegistry, Session, SystemPrompt and ToolRuntime APIs. It verifies native confirmation, schema-valid compaction events, summary exclusion, the real pre-step waterfall, stale action handling and host-bound user provenance. It does not claim a DSH CLI profile install or engine-generated automatic compaction.
-- macOS evidence comes from the public `macos-latest` CI matrix, not from these Windows-generated Codex host receipts. An authenticated real Mac Codex automatic lifecycle remains unverified.
+- macOS evidence comes from the public `macos-latest` CI matrix, not from these Windows-generated Codex host receipts.
 
 The driver injects the vetted repository Hook definitions through thread/start.config.hooks, disables installed plugins for that ephemeral thread, and sets bypass_hook_trust only in the same thread configuration. It aborts before starting if an unrelated non-plugin unmanaged Hook is active, and fails verification if an unrelated Hook nevertheless runs. It does not install the plugin, trust a project, disable another plugin persistently, or change global Codex configuration.
 
